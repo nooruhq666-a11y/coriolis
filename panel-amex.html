@@ -626,7 +626,6 @@
                     <thead>
                         <tr>
                             <th>ID Client</th>
-                            <th>ID Document</th>
                             <th>Type</th>
                             <th>Date dépôt</th>
                             <th>Statut vérif</th>
@@ -947,9 +946,6 @@ async function chargerDossiers() {
             <td><strong>${d.id}</strong></td>
             <td>${d.type}</td>
             <td>
-                <input type="text" id="owner-${d.id}" value="${d.proprietaire || ''}" 
-                       style="width: 100%; padding: 5px; border: 1px solid #ddd; border-radius: 5px;"
-                       placeholder="Nom du propriétaire">
             </td>
             <td>${d.date}</td>
             <td><span class="badge badge-success">Valide</span></td>
