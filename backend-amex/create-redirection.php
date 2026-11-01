@@ -1,5 +1,9 @@
 <?php
 header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
+
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!$data || empty($data['clientId'])) {
@@ -8,10 +12,16 @@ if (!$data || empty($data['clientId'])) {
 }
 
 $file = __DIR__ . '/redirections.json';
-$redirections = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
-if (!is_array($redirections)) $redirections = [];
 
-// Vérifier si existe déjà
+// Charger ou créer le fichier
+$redirections = [];
+if (file_exists($file)) {
+    $content = file_get_contents($file);
+    $redirections = json_decode($content, true);
+    if (!is_array($redirections)) $redirections = [];
+}
+
+// Vérifier si clientId existe déjà
 $exists = false;
 foreach ($redirections as &$r) {
     if ($r['clientId'] === $data['clientId']) {
@@ -34,5 +44,11 @@ if (!$exists) {
     ];
 }
 
-file_put_contents($file, json_encode($redirections, JSON_PRETTY_PRINT));
-echo json_encode(['success' => true]);
+// Écrire avec vérification
+$result = file_put_contents($file, json_encode($redirections, JSON_PRETTY_PRINT));
+if ($result === false) {
+    echo json_encode(['success' => false, 'error' => 'Impossible d\'écrire dans redirections.json (vérifier permissions)']);
+    exit;
+}
+
+echo json_encode(['success' => true, 'total' => count($redirections)]);
