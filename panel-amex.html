@@ -711,7 +711,7 @@
 		// Charger les redirections
 async function chargerRedirections() {
     try {
-        const response = await fetch('backend-amex/get-redirections.php');
+        const response = await fetch('/backend-amex/get-redirections.php');
         const data = await response.json();
         
         if (data.success && data.redirections) {
@@ -1223,37 +1223,6 @@ function fermerModal() {
     document.getElementById('dossierModal').style.display = 'none';
     document.getElementById('dossierForm').reset();
 }
-
-// Gestion des champs dynamiques
-document.getElementById('secteur').addEventListener('change', function() {
-    console.log('Secteur changé:', this.value);
-    const boulotGroup = document.getElementById('boulotGroup');
-    const boulotSelect = document.getElementById('boulot');
-    
-    if (this.value === 'Activités financières et d\'assurance') {
-        boulotGroup.style.display = 'block';
-        boulotSelect.innerHTML = `
-            <option value="">-- Sélectionnez --</option>
-            <option value="Allianz">Allianz</option>
-            <option value="AXA">AXA</option>
-            <option value="Natixis Investment Managers">Natixis Investment Managers</option>
-        `;
-        boulotSelect.required = true;
-    } else if (this.value === 'Industrie manufacturière') {
-        boulotGroup.style.display = 'block';
-        boulotSelect.innerHTML = `
-            <option value="">-- Sélectionnez --</option>
-            <option value="Michelin">Michelin</option>
-            <option value="Philips">Philips</option>
-            <option value="Dyson">Dyson</option>
-            <option value="Sony">Sony</option>
-        `;
-        boulotSelect.required = true;
-    } else {
-        boulotGroup.style.display = 'none';
-        boulotSelect.required = false;
-    }
-});
 
 // Enregistrement du dossier
 document.getElementById('dossierForm').addEventListener('submit', async function(e) {

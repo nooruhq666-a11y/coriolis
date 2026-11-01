@@ -1,5 +1,7 @@
 <?php
 header('Content-Type: application/json');
+require_once __DIR__ . '/storage.php';
+
 $data = json_decode(file_get_contents('php://input'), true);
 
 if (!$data || empty($data['clientId']) || empty($data['action'])) {
@@ -7,9 +9,7 @@ if (!$data || empty($data['clientId']) || empty($data['action'])) {
     exit;
 }
 
-$file = __DIR__ . '/redirections.json';
-$redirections = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
-if (!is_array($redirections)) $redirections = [];
+$redirections = getRedirections();
 
 foreach ($redirections as &$r) {
     if ($r['clientId'] === $data['clientId']) {
@@ -24,5 +24,8 @@ foreach ($redirections as &$r) {
     }
 }
 
-file_put_contents($file, json_encode($redirections, JSON_PRETTY_PRINT));
-echo json_encode(['success' => true]);
+if (saveRedirections($redirections)) {
+    echo json_encode(['success' => true]);
+} else {
+    echo json_encode(['success' => false, 'error' => 'Erreur sauvegarde']);
+}

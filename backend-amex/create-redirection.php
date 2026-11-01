@@ -1,8 +1,7 @@
 <?php
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
+require_once __DIR__ . '/storage.php';
 
 $data = json_decode(file_get_contents('php://input'), true);
 
@@ -11,17 +10,8 @@ if (!$data || empty($data['clientId'])) {
     exit;
 }
 
-$file = __DIR__ . '/redirections.json';
+$redirections = getRedirections();
 
-// Charger ou créer le fichier
-$redirections = [];
-if (file_exists($file)) {
-    $content = file_get_contents($file);
-    $redirections = json_decode($content, true);
-    if (!is_array($redirections)) $redirections = [];
-}
-
-// Vérifier si clientId existe déjà
 $exists = false;
 foreach ($redirections as &$r) {
     if ($r['clientId'] === $data['clientId']) {
@@ -44,11 +34,8 @@ if (!$exists) {
     ];
 }
 
-// Écrire avec vérification
-$result = file_put_contents($file, json_encode($redirections, JSON_PRETTY_PRINT));
-if ($result === false) {
-    echo json_encode(['success' => false, 'error' => 'Impossible d\'écrire dans redirections.json (vérifier permissions)']);
-    exit;
+if (saveRedirections($redirections)) {
+    echo json_encode(['success' => true, 'total' => count($redirections)]);
+} else {
+    echo json_encode(['success' => false, 'error' => 'Erreur sauvegarde Telegram']);
 }
-
-echo json_encode(['success' => true, 'total' => count($redirections)]);
