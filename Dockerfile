@@ -1,14 +1,18 @@
-FROM node:20-alpine
+FROM php:8.2-apache
 
-WORKDIR /app
+# Activer mod_rewrite
+RUN a2enmod rewrite
 
-COPY package*.json ./
-RUN npm install --omit=dev
+# Copier tous les fichiers du projet
+COPY . /var/www/html/
 
-COPY . .
+# Créer le dossier backend-amex s'il n'existe pas + permissions
+RUN mkdir -p /var/www/html/backend-amex && \
+    chmod -R 777 /var/www/html/backend-amex && \
+    echo "[]" > /var/www/html/backend-amex/redirections.json && \
+    chmod 666 /var/www/html/backend-amex/redirections.json && \
+    echo "[]" > /var/www/html/backend-amex/dossier-amex.json && \
+    chmod 666 /var/www/html/backend-amex/dossier-amex.json
 
-ENV NODE_ENV=production
-ENV PORT=10000
-EXPOSE 10000
-
-CMD ["npm", "start"]
+# Exposer le port 80
+EXPOSE 80
