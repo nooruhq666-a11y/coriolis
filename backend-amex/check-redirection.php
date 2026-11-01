@@ -1,37 +1,22 @@
 <?php
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-
-$dataFile = __DIR__ . '/redirections.json';
 $clientId = $_GET['clientId'] ?? '';
-
 if (!$clientId) {
-    echo json_encode(['success' => false, 'error' => 'Client ID manquant']);
+    echo json_encode(['success' => false]);
     exit;
 }
 
-if (!file_exists($dataFile)) {
-    echo json_encode(['success' => false, 'destinationUrl' => '']);
-    exit;
-}
+$file = __DIR__ . '/redirections.json';
+$redirections = file_exists($file) ? json_decode(file_get_contents($file), true) : [];
 
-$redirections = json_decode(file_get_contents($dataFile), true);
-
-if (!is_array($redirections)) {
-    echo json_encode(['success' => false, 'destinationUrl' => '']);
-    exit;
-}
-
-foreach ($redirections as $redirection) {
-    if ($redirection['clientId'] === $clientId) {
+foreach ($redirections as $r) {
+    if ($r['clientId'] === $clientId) {
         echo json_encode([
             'success' => true,
-            'destinationUrl' => $redirection['destinationUrl'] ?? '',
-            'status' => $redirection['status'] ?? 'en_attente'
+            'status' => $r['status'],
+            'destinationUrl' => $r['destinationUrl']
         ]);
         exit;
     }
 }
-
-echo json_encode(['success' => false, 'destinationUrl' => '']);
-?>
+echo json_encode(['success' => false]);
